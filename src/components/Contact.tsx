@@ -25,7 +25,7 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="bg-mist py-20 sm:py-28">
+    <section id="contact" className="bg-mist py-16 sm:py-20 lg:py-28">
       <div className="mx-auto grid max-w-6xl gap-12 px-5 sm:px-8 lg:grid-cols-[1fr_1.05fr]">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#6e6e73]">

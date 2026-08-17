@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Outfit, Syne } from "next/font/google";
 import { DesignSwitcher } from "../components/DesignSwitcher";
 import "./globals.css";
@@ -19,6 +19,12 @@ export const metadata: Metadata = {
   title: "Woodlands Group | Transport, Travel & Beyond",
   description:
     "Woodlands Transport Group — Singapore’s diversified group spanning transport, travel, engineering, hospitality, CashBox, Plotigo, and Flash Laundry.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

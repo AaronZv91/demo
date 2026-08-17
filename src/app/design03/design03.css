@@ -14,7 +14,9 @@
 .d03-stage {
   position: relative;
   height: 100svh;
+  height: 100dvh;
   min-height: 100svh;
+  min-height: 100dvh;
   overflow: hidden;
   background: var(--d03-paper);
 }
@@ -64,7 +66,7 @@
 
 .d03-bar {
   position: absolute;
-  top: 4.6rem;
+  top: calc(var(--chrome-top, 3.5rem) + 0.35rem);
   left: 1.5rem;
   right: 1.5rem;
   z-index: 8;
@@ -556,10 +558,90 @@
 
   .d03-bar {
     grid-template-columns: 1fr auto;
+    left: 1rem;
+    right: 1rem;
+    gap: 8px;
   }
 
   .d03-actions {
     grid-column: 2;
+  }
+
+  .d03-detail.is-bottom {
+    width: min(560px, 88vw);
+    bottom: 5.4rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .d03-logo span {
+    display: none;
+  }
+
+  .d03-actions .ghost {
+    display: none;
+  }
+
+  .d03-actions a {
+    min-height: 40px;
+    padding: 8px 14px;
+  }
+
+  .d03-card {
+    width: 152px;
+    height: 152px;
+    margin-left: -76px;
+    margin-top: -76px;
+    border-radius: 22px;
+  }
+
+  .d03-face {
+    padding: 16px;
+  }
+
+  .d03-detail.is-bottom {
+    bottom: calc(4.4rem + env(safe-area-inset-bottom, 0px));
+    width: min(92vw, 420px);
+  }
+
+  .d03-detail.is-bottom p {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 0.8rem;
+  }
+
+  .d03-controls {
+    bottom: calc(0.55rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .d03-hint {
+    display: none;
+  }
+
+  .d03-contact {
+    padding: 3.5rem 1.1rem calc(3.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .d03-contact h2 {
+    font-size: 1.85rem;
+  }
+}
+
+@media (max-height: 860px) and (min-width: 981px) {
+  .d03-card {
+    width: 232px;
+    height: 232px;
+    margin-left: -116px;
+    margin-top: -116px;
+  }
+
+  .d03-detail.is-bottom p {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 }
 

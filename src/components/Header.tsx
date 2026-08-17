@@ -9,7 +9,7 @@ const links = [
 
 export function Header() {
   return (
-    <header className="sticky top-12 z-50 border-b border-black/[0.06] bg-white/80 backdrop-blur-xl">
+    <header className="sticky z-50 border-b border-black/[0.06] bg-white/80 backdrop-blur-xl top-[var(--switcher-h)]">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
         <a href="#journey" className="d01-brand group flex items-center">
           <Image
@@ -18,7 +18,7 @@ export function Header() {
             width={200}
             height={70}
             priority
-            className="h-9 w-auto object-contain transition duration-500 ease-out group-hover:scale-105 sm:h-10"
+            className="h-8 w-auto object-contain transition duration-500 ease-out group-hover:scale-105 sm:h-10"
           />
         </a>
         <nav className="d01-nav hidden items-center gap-7 md:flex" aria-label="Primary">

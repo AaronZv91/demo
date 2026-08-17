@@ -60,8 +60,16 @@ export function Design02Experience() {
     const layout = (rotation: number) => {
       const w = window.innerWidth;
       const h = window.innerHeight;
-      const cardHalf = w < 820 ? 58 : 75;
-      const radius = Math.max(170, Math.min(w * 0.4, h * 0.5 - cardHalf * 1.35 - 56));
+      const phone = w < 640;
+      const compact = w < 820 || h < 860;
+      const cardHalf = phone ? 49 : compact ? 58 : 75;
+      const radius = Math.max(
+        phone ? 112 : 160,
+        Math.min(
+          w * (phone ? 0.33 : 0.4),
+          h * (phone ? 0.26 : compact ? 0.42 : 0.5) - cardHalf * 1.35 - (phone ? 36 : 56),
+        ),
+      );
 
       cardsRef.current.forEach((el, i) => {
         if (!el) return;

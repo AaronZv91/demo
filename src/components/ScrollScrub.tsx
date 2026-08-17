@@ -307,7 +307,7 @@ export function ScrollScrub() {
       className="relative"
       style={{ height: `calc(100svh + ${FRAME_COUNT * TRACK_PX_PER_FRAME}px)` }}
     >
-      <div className="sticky top-0 h-[100svh] w-full overflow-hidden bg-[#f5f5f7]">
+      <div className="sticky top-0 h-[100svh] h-[100dvh] w-full overflow-hidden bg-[#f5f5f7]">
         <div className="absolute inset-0">
           <canvas
             ref={canvasRef}
@@ -334,10 +334,10 @@ export function ScrollScrub() {
           />
         </div>
 
-        <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center overflow-hidden px-3 py-16 sm:px-6 sm:py-20">
+        <div className="pointer-events-none absolute inset-0 z-20 flex items-start justify-center overflow-hidden px-3 sm:px-6 lg:items-center" style={{ paddingTop: "calc(var(--chrome-top) + 0.35rem)", paddingBottom: "1.25rem" }}>
           <div
             key={current.id}
-            className={`d01-stack relative my-auto w-[92vw] sm:w-[70vw] ${stackClass} ${
+            className={`d01-stack relative my-0 w-[min(92vw,40rem)] sm:w-[min(70vw,46rem)] lg:my-auto lg:w-[min(58vw,50rem)] ${stackClass} ${
               ui.playing ? "pointer-events-none" : "pointer-events-auto"
             }`}
           >
@@ -377,10 +377,10 @@ export function ScrollScrub() {
                     Background
                   </p>
                 </div>
-                <p className="mt-3 text-sm leading-relaxed text-[#1d1d1f]/80 sm:text-lg sm:leading-8">
+                <p className="d01-summary mt-3 text-sm leading-relaxed text-[#1d1d1f]/80 sm:text-lg sm:leading-8">
                   {current.summary}
                 </p>
-                <p className="mt-4 border-l-2 border-[#1d1d1f]/20 pl-3 font-display text-base font-semibold text-[#1d1d1f] sm:mt-5 sm:pl-4 sm:text-2xl">
+                <p className="d01-highlight mt-4 border-l-2 border-[#1d1d1f]/20 pl-3 font-display text-base font-semibold text-[#1d1d1f] sm:mt-5 sm:pl-4 sm:text-2xl">
                   {current.highlight}
                 </p>
               </div>
@@ -402,7 +402,7 @@ export function ScrollScrub() {
                         <p className="text-sm font-semibold text-[#1d1d1f] sm:text-base">
                           {s.title}
                         </p>
-                        <p className="mt-1 text-sm leading-relaxed text-[#6e6e73] sm:text-[15px]">
+                        <p className="d01-svc-detail mt-1 text-sm leading-relaxed text-[#6e6e73] sm:text-[15px]">
                           {s.detail}
                         </p>
                       </div>
@@ -422,7 +422,7 @@ export function ScrollScrub() {
                 </div>
                 <div className="mt-4 grid gap-3 sm:mt-5 sm:grid-cols-3 sm:gap-6">
                   {current.address && (
-                    <div>
+                    <div className="d01-contact-address">
                       <p className="text-[10px] uppercase tracking-wider text-[#86868b] sm:text-xs">
                         Address
                       </p>
@@ -463,7 +463,7 @@ export function ScrollScrub() {
                     href={current.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#1d1d1f] px-4 py-2.5 text-sm font-semibold text-white transition duration-500 hover:-translate-y-0.5 hover:bg-black hover:shadow-[0_12px_28px_rgba(0,0,0,0.18)] sm:mt-6 sm:px-5 sm:text-base"
+                    className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-full bg-[#1d1d1f] px-4 py-2.5 text-sm font-semibold text-white transition duration-500 hover:-translate-y-0.5 hover:bg-black hover:shadow-[0_12px_28px_rgba(0,0,0,0.18)] sm:mt-6 sm:px-5 sm:text-base"
                   >
                     Visit website
                     <span aria-hidden>→</span>
@@ -483,17 +483,17 @@ export function ScrollScrub() {
         </div>
 
         <aside
-          className="absolute right-3 top-1/2 z-30 -translate-y-1/2 sm:right-5 md:right-7"
+          className="d01-timeline absolute right-3 top-1/2 z-30 -translate-y-1/2 sm:right-5 md:right-7"
           aria-label="Timeline"
         >
-          <div className="relative flex flex-col items-center py-2">
+          <div className="d01-timeline-inner relative flex flex-col items-center py-2">
             <div
-              className="absolute top-3 bottom-3 left-1/2 w-px -translate-x-1/2 bg-black/10"
+              className="d01-timeline-line absolute top-3 bottom-3 left-1/2 w-px -translate-x-1/2 bg-black/10"
               aria-hidden
             />
             <div
               ref={fillRef}
-              className="absolute top-3 left-1/2 w-px -translate-x-1/2 bg-[#1d1d1f]/50"
+              className="d01-timeline-fill absolute top-3 left-1/2 w-px -translate-x-1/2 bg-[#1d1d1f]/50"
               style={{ height: "0px" }}
               aria-hidden
             />
@@ -509,7 +509,7 @@ export function ScrollScrub() {
                   onClick={() =>
                     scrollToProgress(trackRef.current, holdStartProgress(i))
                   }
-                  className="relative z-10 flex h-7 w-7 items-center justify-center transition duration-300 hover:scale-125"
+                  className="relative z-10 flex h-10 w-10 items-center justify-center transition duration-300 hover:scale-125 sm:h-7 sm:w-7"
                 >
                   <span
                     className={`block rounded-full transition-all duration-300 ${

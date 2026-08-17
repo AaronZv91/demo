@@ -1,6 +1,6 @@
 export function About() {
   return (
-    <section id="about" className="bg-white py-20 text-[#1d1d1f] sm:py-28">
+    <section id="about" className="bg-white py-16 text-[#1d1d1f] sm:py-20 lg:py-28">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <div className="max-w-3xl">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#6e6e73]">

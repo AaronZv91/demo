@@ -55,7 +55,12 @@ export function Design03Experience() {
       const rotation = progress * Math.PI * 2;
       const w = window.innerWidth;
       const h = window.innerHeight;
-      const radius = Math.max(280, Math.min(w * 0.46, h * 0.4, 560));
+      const phone = w < 640;
+      const tablet = w < 980;
+      const radius = Math.max(
+        phone ? 128 : tablet ? 200 : 260,
+        Math.min(w * (phone ? 0.36 : 0.44), h * (phone ? 0.24 : tablet ? 0.32 : 0.4), 560),
+      );
       const offset = ((progress * n) % n + n) % n;
       const index = Math.round(offset) % n;
 

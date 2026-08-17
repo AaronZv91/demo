@@ -14,7 +14,10 @@ export function DesignSwitcher() {
   const light = true;
 
   return (
-    <div className="fixed inset-x-0 top-0 z-[200] flex justify-center pt-3">
+    <div
+      className="fixed inset-x-0 top-0 z-[200] flex justify-center px-3"
+      style={{ paddingTop: "max(0.6rem, env(safe-area-inset-top))" }}
+    >
       <nav
         aria-label="Design versions"
         className={`flex items-center rounded-full p-1 shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-xl ${
@@ -33,7 +36,7 @@ export function DesignSwitcher() {
               key={d.href}
               href={d.href}
               prefetch
-              className={`rounded-full px-3 py-2 text-[10px] font-semibold tracking-[0.14em] uppercase transition sm:px-4 sm:text-xs ${
+              className={`min-h-10 rounded-full px-2.5 py-2 text-[10px] font-semibold tracking-[0.12em] uppercase transition sm:min-h-0 sm:px-4 sm:text-xs ${
                 active
                   ? light
                     ? "bg-black text-white"

@@ -5,7 +5,7 @@ export function BusinessGrid() {
   const units = BUSINESSES.filter((b) => b.index > 0);
 
   return (
-    <section id="businesses" className="bg-paper py-20 sm:py-28">
+    <section id="businesses" className="bg-paper py-16 sm:py-20 lg:py-28">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <div className="max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#6e6e73]">
