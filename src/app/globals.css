@@ -1,26 +1,383 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --navy: #1d1d1f;
+  --navy-deep: #1d1d1f;
+  --red: #d61f26;
+  --red-bright: #e83a3f;
+  --sky: #6e6e73;
+  --dawn: #6e6e73;
+  --mist: #fbfbfd;
+  --paper: #f5f5f7;
+  --ink: #1d1d1f;
+  --muted: #6e6e73;
+  --line: rgba(0, 0, 0, 0.08);
+  --background: var(--paper);
+  --foreground: var(--ink);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-brand-red: var(--red);
+  --color-brand-red-bright: var(--red-bright);
+  --color-sky: var(--sky);
+  --color-dawn: var(--dawn);
+  --color-mist: var(--mist);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --font-sans: var(--font-outfit);
+  --font-display: var(--font-syne);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  background: #f5f5f7;
+}
+
+html:has(.d02),
+html:has(.d03) {
+  scroll-behavior: auto;
+  background: #f4f3f1;
 }
 
 body {
-  background: var(--background);
+  background: var(--paper);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-outfit), system-ui, sans-serif;
+}
+
+body:has(.d02),
+body:has(.d03) {
+  background: #fff;
+  color: #111113;
+  display: block;
+}
+
+::selection {
+  background: rgba(0, 0, 0, 0.12);
+  color: #1d1d1f;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise {
+  animation: rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-rise-1 {
+  animation: rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+
+.animate-rise-2 {
+  animation: rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
+
+.animate-rise-3 {
+  animation: rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+}
+
+/* Center focus cards */
+.focus-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(22px) saturate(1.2);
+  border-radius: 22px;
+  box-shadow:
+    0 22px 50px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transition:
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.4s ease;
+}
+
+.focus-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 65%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.focus-card:hover {
+  transform: translateY(-6px);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow:
+    0 28px 64px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.focus-card:hover::after {
+  transform: translateX(120%);
+}
+
+.focus-card:hover .logo-glow {
+  transform: scale(1.06);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.06),
+    0 16px 36px rgba(0, 0, 0, 0.1);
+}
+
+.focus-spotlight {
+  background:
+    radial-gradient(
+      ellipse 72% 58% at 50% 48%,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.28) 52%,
+      rgba(245, 245, 247, 0.62) 100%
+    );
+}
+
+.focus-sweep {
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.35) 48%,
+    transparent 62%
+  );
+  animation: sweep-drift 7s ease-in-out infinite alternate;
+  mix-blend-mode: soft-light;
+}
+
+.logo-glow {
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.06),
+    0 10px 28px rgba(0, 0, 0, 0.08);
+  border-radius: 18px;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.focus-reveal {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0) scale(0.96);
+  filter: blur(8px);
+  pointer-events: none;
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform, filter;
+}
+
+.focus-reveal.is-in {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0);
+  pointer-events: auto;
+}
+
+@keyframes sweep-drift {
+  from {
+    transform: translateX(-12%);
+  }
+  to {
+    transform: translateX(40%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .animate-rise,
+  .animate-rise-1,
+  .animate-rise-2,
+  .animate-rise-3,
+  .focus-sweep {
+    animation: none;
+  }
+
+  .focus-reveal {
+    transition: none;
+    filter: none;
+  }
+
+  .focus-reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  .focus-card:hover,
+  .focus-card:hover .logo-glow,
+  .focus-card:hover::after,
+  .d01-nav a:hover,
+  .d01-brand:hover img,
+  .d01-svc:hover,
+  .d01-stack.is-in .d01-panel,
+  .d01-stack.is-out .d01-panel,
+  .d01-stack.is-in .d01-meter,
+  .d01-stack.is-out .d01-meter {
+    transform: none;
+    animation: none;
+    filter: none;
+  }
+
+  .d01-stack.is-in .d01-panel,
+  .d01-stack.is-in .d01-meter {
+    opacity: 1;
+  }
+
+  .d01-stack.is-out .d01-panel,
+  .d01-stack.is-out .d01-meter,
+  .d01-stack.is-gone {
+    opacity: 0;
+  }
+
+  .focus-card::after {
+    display: none;
+  }
+}
+
+.d01-nav a {
+  position: relative;
+  display: inline-block;
+}
+
+.d01-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: 50%;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.d01-nav a:hover::after {
+  transform: scaleX(1);
+}
+
+.d01-svc {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.d01-svc:hover {
+  transform: translateX(8px);
+}
+
+.d01-link {
+  display: inline-block;
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.3s ease;
+}
+
+.d01-link:hover {
+  transform: translateX(3px);
+  opacity: 0.7;
+}
+
+@keyframes d01-panel-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 52px, 0);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    filter: blur(0);
+  }
+}
+
+@keyframes d01-panel-out {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, -22vh, 0);
+    filter: blur(8px);
+  }
+}
+
+.d01-stack {
+  will-change: transform, opacity;
+}
+
+.d01-stack.is-landed .d01-panel,
+.d01-stack.is-landed .d01-meter {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  animation: none;
+}
+
+.d01-stack.is-in .d01-panel {
+  animation: d01-panel-in 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.d01-stack.is-in .d01-panel:nth-child(1) {
+  animation-delay: 0ms;
+}
+.d01-stack.is-in .d01-panel:nth-child(2) {
+  animation-delay: 90ms;
+}
+.d01-stack.is-in .d01-panel:nth-child(3) {
+  animation-delay: 170ms;
+}
+.d01-stack.is-in .d01-panel:nth-child(4) {
+  animation-delay: 250ms;
+}
+
+.d01-stack.is-in .d01-meter {
+  animation: d01-panel-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both;
+}
+
+.d01-stack.is-out .d01-panel {
+  animation: d01-panel-out 0.72s cubic-bezier(0.22, 1, 0.36, 1) both;
+  pointer-events: none;
+}
+
+.d01-stack.is-out .d01-panel:nth-child(1) {
+  animation-delay: 0ms;
+}
+.d01-stack.is-out .d01-panel:nth-child(2) {
+  animation-delay: 55ms;
+}
+.d01-stack.is-out .d01-panel:nth-child(3) {
+  animation-delay: 110ms;
+}
+.d01-stack.is-out .d01-panel:nth-child(4) {
+  animation-delay: 165ms;
+}
+
+.d01-stack.is-out .d01-meter {
+  animation: d01-panel-out 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
+}
+
+.d01-stack.is-gone {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
 }

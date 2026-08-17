@@ -1,0 +1,13 @@
+{
+  "source": "资源/Video/Woodlands Group.mp4",
+  "durationSeconds": 227.11,
+  "sourceFps": 50,
+  "extractFps": 0.8,
+  "width": 1280,
+  "height": 720,
+  "frameCount": 182,
+  "pattern": "/scroll-frames/frame-%04d.jpg",
+  "firstFrame": "frame-0001.jpg",
+  "lastFrame": "frame-0182.jpg",
+  "totalSizeMB": 14.18
+}
