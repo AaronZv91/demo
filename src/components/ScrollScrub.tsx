@@ -226,7 +226,10 @@ function loadSequence(
   count: number,
   bucket: Record<string, (HTMLImageElement | null)[]>,
 ) {
-  const frames = Array.from({ length: count }, () => null);
+  const frames: (HTMLImageElement | null)[] = Array.from(
+    { length: count },
+    () => null,
+  );
   bucket[id] = frames;
   for (let i = 0; i < count; i++) {
     const img = new window.Image();
