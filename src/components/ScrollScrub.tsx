@@ -513,21 +513,21 @@ export function ScrollScrub() {
           className="pointer-events-none absolute inset-0 z-20 flex items-start justify-center overflow-hidden px-3 sm:px-6 lg:items-center"
           style={{
             paddingTop: "calc(var(--chrome-top) + 0.35rem)",
-            paddingBottom: "1.25rem",
+            paddingBottom: "0.75rem",
           }}
         >
           {showCompany && current && (
             <div
               key={current.id}
-              className={`d01-stack relative my-0 w-[min(92vw,40rem)] sm:w-[min(70vw,46rem)] lg:my-auto lg:w-[min(58vw,50rem)] ${stackClass} ${
+              className={`d01-stack relative my-0 w-[min(90vw,39rem)] sm:w-[min(69vw,45rem)] lg:my-auto lg:w-[min(57vw,49rem)] ${stackClass} ${
                 ui.playing ? "pointer-events-none" : "pointer-events-auto"
               }`}
             >
-              <div className="pointer-events-none absolute -inset-8 -z-10 rounded-full bg-[radial-gradient(circle,rgba(0,0,0,0.04),transparent_65%)] blur-2xl" />
+              <div className="pointer-events-none absolute -inset-4 -z-10 rounded-full bg-[radial-gradient(circle,rgba(0,0,0,0.04),transparent_65%)] blur-2xl" />
 
-              <div className="d01-panel mb-4 sm:mb-5">
-                <div className="focus-card flex items-center gap-5 p-5 sm:gap-8 sm:p-8">
-                  <div className="logo-glow flex h-20 w-20 shrink-0 items-center justify-center bg-white p-2.5 sm:h-28 sm:w-28">
+              <div className="d01-panel mb-3 sm:mb-3.5">
+                <div className="focus-card flex items-center gap-4 p-5 sm:gap-6 sm:p-6">
+                  <div className="logo-glow flex h-20 w-20 shrink-0 items-center justify-center bg-white p-2.5 sm:h-24 sm:w-24">
                     <Image
                       src={current.logo}
                       alt={current.name}
@@ -541,42 +541,42 @@ export function ScrollScrub() {
                     <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#6e6e73] sm:text-xs">
                       {String(current.index).padStart(2, "0")} · Chapter
                     </p>
-                    <h2 className="mt-1 font-display text-2xl font-semibold leading-tight text-[#1d1d1f] sm:text-5xl">
+                    <h2 className="mt-1 font-display text-2xl font-semibold leading-tight text-[#1d1d1f] sm:text-4xl">
                       {current.name}
                     </h2>
-                    <p className="mt-2 text-sm text-[#6e6e73] sm:text-lg">
+                    <p className="mt-1.5 text-sm text-[#6e6e73] sm:text-base">
                       {current.tagline}
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="d01-panel mb-4 sm:mb-5">
-                <div className="focus-card p-5 sm:p-8">
+              <div className="d01-panel mb-3 sm:mb-3.5">
+                <div className="focus-card p-5 sm:p-6">
                   <div className="flex items-center gap-2">
                     <span className="h-px w-6 bg-[#1d1d1f]/20 sm:w-8" />
                     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#6e6e73] sm:text-xs">
                       Background
                     </p>
                   </div>
-                  <p className="d01-summary mt-3 text-sm leading-relaxed text-[#1d1d1f]/80 sm:text-lg sm:leading-8">
+                  <p className="d01-summary mt-2 text-sm leading-relaxed text-[#1d1d1f]/80 sm:text-base sm:leading-7">
                     {current.summary}
                   </p>
-                  <p className="d01-highlight mt-4 border-l-2 border-[#1d1d1f]/20 pl-3 font-display text-base font-semibold text-[#1d1d1f] sm:mt-5 sm:pl-4 sm:text-2xl">
+                  <p className="d01-highlight mt-3 border-l-2 border-[#1d1d1f]/20 pl-3 font-display text-base font-semibold text-[#1d1d1f] sm:pl-4 sm:text-xl">
                     {current.highlight}
                   </p>
                 </div>
               </div>
 
-              <div className="d01-panel mb-4 sm:mb-5">
-                <div className="focus-card p-5 sm:p-8">
+              <div className="d01-panel mb-3 sm:mb-3.5">
+                <div className="focus-card p-5 sm:p-6">
                   <div className="flex items-center gap-2">
                     <span className="h-px w-6 bg-[#1d1d1f]/20 sm:w-8" />
                     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#6e6e73] sm:text-xs">
                       Services
                     </p>
                   </div>
-                  <ul className="mt-4 grid gap-3 sm:mt-5 sm:grid-cols-2 sm:gap-5">
+                  <ul className="mt-3 grid gap-2.5 sm:mt-4 sm:grid-cols-2 sm:gap-3">
                     {current.services.map((s) => (
                       <li key={s.title} className="d01-svc flex gap-3">
                         <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#1d1d1f]" />
@@ -595,14 +595,14 @@ export function ScrollScrub() {
               </div>
 
               <div className="d01-panel">
-                <div className="focus-card p-5 sm:p-8">
+                <div className="focus-card p-5 sm:p-6">
                   <div className="flex items-center gap-2">
                     <span className="h-px w-6 bg-[#1d1d1f]/20 sm:w-8" />
                     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#6e6e73] sm:text-xs">
                       Contact
                     </p>
                   </div>
-                  <div className="mt-4 grid gap-3 sm:mt-5 sm:grid-cols-3 sm:gap-6">
+                  <div className="mt-3 grid gap-2.5 sm:mt-4 sm:grid-cols-3 sm:gap-4">
                     {current.address && (
                       <div className="d01-contact-address">
                         <p className="text-[10px] uppercase tracking-wider text-[#86868b] sm:text-xs">
@@ -645,7 +645,7 @@ export function ScrollScrub() {
                       href={current.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-full bg-[#1d1d1f] px-4 py-2.5 text-sm font-semibold text-white transition duration-500 hover:-translate-y-0.5 hover:bg-black hover:shadow-[0_12px_28px_rgba(0,0,0,0.18)] sm:mt-6 sm:px-5 sm:text-base"
+                      className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-full bg-[#1d1d1f] px-4 py-2 text-sm font-semibold text-white transition duration-500 hover:-translate-y-0.5 hover:bg-black hover:shadow-[0_12px_28px_rgba(0,0,0,0.18)] sm:mt-4 sm:px-5"
                     >
                       Visit website
                       <span aria-hidden>→</span>
@@ -654,7 +654,7 @@ export function ScrollScrub() {
                 </div>
               </div>
 
-              <div className="d01-meter mt-5 h-0.5 overflow-hidden rounded-full bg-black/10">
+              <div className="d01-meter mt-3 h-0.5 overflow-hidden rounded-full bg-black/10">
                 <div
                   ref={showMission ? undefined : barRef}
                   className="h-full bg-[#1d1d1f]"
@@ -667,13 +667,13 @@ export function ScrollScrub() {
           {showMission && (
             <div
               key="mission"
-              className={`d01-stack d01-mission relative my-0 w-[min(92vw,40rem)] sm:w-[min(70vw,46rem)] lg:my-auto lg:w-[min(58vw,50rem)] ${stackClass} pointer-events-auto`}
+              className={`d01-stack d01-mission relative my-0 w-[min(90vw,39rem)] sm:w-[min(69vw,45rem)] lg:my-auto lg:w-[min(57vw,49rem)] ${stackClass} pointer-events-auto`}
             >
-              <div className="pointer-events-none absolute -inset-8 -z-10 rounded-full bg-[radial-gradient(circle,rgba(0,0,0,0.04),transparent_65%)] blur-2xl" />
+              <div className="pointer-events-none absolute -inset-4 -z-10 rounded-full bg-[radial-gradient(circle,rgba(0,0,0,0.04),transparent_65%)] blur-2xl" />
 
-              <div className="d01-panel mb-4 sm:mb-5">
-                <div className="focus-card flex items-center gap-5 p-5 sm:gap-8 sm:p-8">
-                  <div className="logo-glow flex h-20 w-20 shrink-0 items-center justify-center bg-white p-2.5 sm:h-28 sm:w-28">
+              <div className="d01-panel mb-3 sm:mb-3.5">
+                <div className="focus-card flex items-center gap-4 p-5 sm:gap-6 sm:p-6">
+                  <div className="logo-glow flex h-20 w-20 shrink-0 items-center justify-center bg-white p-2.5 sm:h-24 sm:w-24">
                     <Image
                       src={group.logo}
                       alt={group.name}
@@ -686,7 +686,7 @@ export function ScrollScrub() {
                     <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#6e6e73] sm:text-xs">
                       Mission
                     </p>
-                    <h2 className="d01-mission-line mt-1 font-display text-2xl font-semibold leading-tight text-[#1d1d1f] sm:text-5xl">
+                    <h2 className="d01-mission-line mt-1 font-display text-2xl font-semibold leading-tight text-[#1d1d1f] sm:text-4xl">
                       {missionWords.map((word, i) => (
                         <span key={`${word}-${i}`}>{word} </span>
                       ))}
@@ -695,26 +695,26 @@ export function ScrollScrub() {
                 </div>
               </div>
 
-              <div className="d01-panel mb-4 sm:mb-5">
-                <div className="focus-card p-5 sm:p-8">
+              <div className="d01-panel mb-3 sm:mb-3.5">
+                <div className="focus-card p-5 sm:p-6">
                   <div className="flex items-center gap-2">
                     <span className="h-px w-6 bg-[#1d1d1f]/20 sm:w-8" />
                     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#6e6e73] sm:text-xs">
                       Woodlands Transport Group
                     </p>
                   </div>
-                  <p className="mt-3 text-sm leading-relaxed text-[#1d1d1f]/80 sm:text-lg sm:leading-8">
+                  <p className="mt-2 text-sm leading-relaxed text-[#1d1d1f]/80 sm:text-base sm:leading-7">
                     {group.summary}
                   </p>
-                  <p className="d01-highlight mt-4 border-l-2 border-[#1d1d1f]/20 pl-3 font-display text-base font-semibold text-[#1d1d1f] sm:mt-5 sm:pl-4 sm:text-2xl">
+                  <p className="d01-highlight mt-3 border-l-2 border-[#1d1d1f]/20 pl-3 font-display text-base font-semibold text-[#1d1d1f] sm:pl-4 sm:text-xl">
                     {group.highlight}
                   </p>
                 </div>
               </div>
 
               <div className="d01-panel">
-                <div className="focus-card p-5 sm:p-8">
-                  <ul className="grid gap-4 sm:grid-cols-3">
+                <div className="focus-card p-5 sm:p-6">
+                  <ul className="grid gap-3 sm:grid-cols-3 sm:gap-4">
                     {[
                       { t: "Since 1974", d: "A homegrown Singapore group." },
                       { t: "Eight brands", d: "One standard of care on the road." },
@@ -733,7 +733,7 @@ export function ScrollScrub() {
                 </div>
               </div>
 
-              <div className="d01-meter mt-5 h-0.5 overflow-hidden rounded-full bg-black/10">
+              <div className="d01-meter mt-3 h-0.5 overflow-hidden rounded-full bg-black/10">
                 <div
                   ref={barRef}
                   className="h-full bg-[#1d1d1f]"

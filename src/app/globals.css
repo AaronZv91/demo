@@ -442,17 +442,75 @@ body:has(.d03) {
 }
 
 .d01-stack {
-  max-width: min(50rem, calc(100vw - 2rem));
-  max-height: calc(100dvh - var(--chrome-top) - 1.5rem);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
+  max-width: min(49rem, calc(100vw - 2.5rem));
+  max-height: calc(100dvh - var(--chrome-top) - 1.25rem);
+  overflow: hidden;
+  zoom: 0.98;
 }
 
 .d01-summary {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .d01-stack .d01-panel {
+    margin-bottom: 0.65rem;
+  }
+
+  .d01-stack .focus-card {
+    padding: 1.15rem 1.35rem !important;
+    border-radius: 18px;
+  }
+
+  .d01-stack .logo-glow {
+    height: 4.75rem;
+    width: 4.75rem;
+  }
+
+  .d01-stack h2 {
+    font-size: 1.85rem !important;
+    line-height: 1.12 !important;
+  }
+
+  .d01-stack .d01-highlight {
+    margin-top: 0.65rem !important;
+    font-size: 1.05rem !important;
+  }
+
+  .d01-summary {
+    -webkit-line-clamp: 2;
+    margin-top: 0.5rem !important;
+    font-size: 0.9rem !important;
+    line-height: 1.45 !important;
+  }
+
+  .d01-svc-detail {
+    display: none;
+  }
+
+  .d01-stack ul {
+    margin-top: 0.65rem !important;
+    gap: 0.45rem !important;
+  }
+
+  .d01-stack .d01-meter {
+    margin-top: 0.65rem !important;
+  }
+
+  .d01-mission .focus-card ul {
+    gap: 0.65rem !important;
+  }
+
+  .d01-mission .focus-card li p:first-child {
+    font-size: 1rem !important;
+  }
+
+  .d01-mission .focus-card li p:last-child {
+    font-size: 0.8125rem !important;
+    line-height: 1.35 !important;
+  }
 }
 
 @media (max-height: 920px) {
@@ -522,9 +580,16 @@ body:has(.d03) {
   }
 
   .d01-stack {
-    width: calc(100vw - 1.5rem) !important;
+    width: calc(100vw - 2rem) !important;
     max-width: none;
-    max-height: calc(100dvh - var(--chrome-top) - 3.25rem);
+    max-height: calc(100dvh - var(--chrome-top) - 3.5rem);
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .d01-stack::-webkit-scrollbar {
+    display: none;
   }
 }
 
