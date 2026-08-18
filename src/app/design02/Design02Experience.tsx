@@ -5,6 +5,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { companyData } from "../../data/companyData";
+import { ESG } from "../../data/esg";
+import { EsgFilm } from "../../components/EsgFilm";
 import "./design02.css";
 
 if (typeof window !== "undefined") {
@@ -62,37 +64,14 @@ export function Design02Experience() {
       const h = window.innerHeight;
       const phone = w < 640;
       const compact = w < 820 || h < 860;
-      const cardHalf = phone ? 49 : compact ? 58 : 75;
       const radius = Math.max(
-        phone ? 112 : 160,
+        phone ? 118 : 156,
         Math.min(
-          w * (phone ? 0.33 : 0.4),
-          h * (phone ? 0.26 : compact ? 0.42 : 0.5) - cardHalf * 1.35 - (phone ? 36 : 56),
+          w * (phone ? 0.32 : 0.27),
+          h * (phone ? 0.24 : compact ? 0.28 : 0.3),
+          268,
         ),
       );
-
-      cardsRef.current.forEach((el, i) => {
-        if (!el) return;
-        const angle = i * step + rotation;
-        const rad = ((angle - 90) * Math.PI) / 180;
-        const x = Math.cos(rad) * radius;
-        const y = Math.sin(rad) * radius;
-        const fromTop = Math.abs(shortestDelta(angle));
-        const t = 1 - Math.min(fromTop / 70, 1);
-        const focus = t * t;
-        const scale = 0.7 + focus * 0.6;
-        const below = y > 18;
-        const opacity = below ? 0 : 0.22 + focus * 0.78;
-        const blur = below || focus > 0.18 ? 0 : 2.4 * (1 - focus);
-        const tilt = shortestDelta(angle) * 0.92;
-
-        el.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${tilt}deg) scale(${scale})`;
-        el.style.opacity = String(opacity);
-        el.style.filter = blur ? `blur(${blur}px)` : "none";
-        el.style.zIndex = String(Math.round(focus * 40));
-        el.style.visibility = opacity < 0.02 ? "hidden" : "visible";
-        el.style.pointerEvents = below ? "none" : "auto";
-      });
 
       let best = 0;
       let bestScore = 999;
@@ -103,6 +82,46 @@ export function Design02Experience() {
           best = i;
         }
       }
+
+      const orbitRadius = bestScore < 6 ? radius * 1.12 : radius;
+
+      cardsRef.current.forEach((el, i) => {
+        if (!el) return;
+        const angle = i * step + rotation;
+        const rad = ((angle - 90) * Math.PI) / 180;
+        const x = Math.cos(rad) * orbitRadius;
+        const y = Math.sin(rad) * orbitRadius;
+        const fromTop = Math.abs(shortestDelta(angle));
+        const t = 1 - Math.min(fromTop / 78, 1);
+        const focus = t * t;
+        const isExpanded = i === best && bestScore < 6;
+
+        if (isExpanded) {
+          el.style.transform = "translate3d(0px, 0px, 0)";
+          el.style.opacity = "1";
+          el.style.filter = "none";
+          el.style.zIndex = "120";
+          el.style.visibility = "visible";
+          el.style.pointerEvents = "auto";
+          el.classList.add("is-expanded");
+          el.classList.remove("is-front");
+          return;
+        }
+
+        el.classList.remove("is-expanded");
+        const scale = 0.68 + focus * 0.72;
+        const opacity = 0.38 + focus * 0.58;
+        const blur = focus > 0.12 ? 0 : 1.6 * (1 - focus);
+
+        el.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
+        el.style.opacity = String(opacity);
+        el.style.filter = blur ? `blur(${blur}px)` : "none";
+        el.style.zIndex = String(Math.round(10 + focus * 50));
+        el.style.visibility = "visible";
+        el.style.pointerEvents = "auto";
+        el.classList.toggle("is-front", focus > 0.72);
+      });
+
       if (best !== currentActive) {
         currentActive = best;
         setActive(best);
@@ -191,23 +210,32 @@ export function Design02Experience() {
               key={co.id}
               type="button"
               aria-label={`Show ${co.name}`}
+              aria-current={i === active ? "true" : undefined}
               ref={(el) => {
                 if (el) cardsRef.current[i] = el;
               }}
-              className={`d02-card${co.photo ? " has-photo" : ""}`}
+              className="d02-card"
               onClick={() => goToIndex(i)}
             >
-              <div className="d02-card-inner">
-                {co.photo ? (
-                  <>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img className="cover" src={co.photo} alt="" />
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img className="logo" src={co.logo} alt="" />
-                  </>
+              <div className="d02-card-compact">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="logo" src={co.logo} alt="" />
+              </div>
+              <div className="d02-card-detail">
+                <p className="d02-card-kicker">
+                  {String(co.index).padStart(2, "0")} · {co.short}
+                </p>
+                <h3>{co.name}</h3>
+                <p className="d02-card-lede">{co.slogan}</p>
+                <p className="d02-card-mission">{co.mission}</p>
+                {co.href ? (
+                  <span className="d02-card-link">
+                    Visit website <span aria-hidden>→</span>
+                  </span>
                 ) : (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img className="logo" src={co.logo} alt="" />
+                  <span className="d02-card-link">
+                    Get in touch <span aria-hidden>→</span>
+                  </span>
                 )}
               </div>
             </button>
@@ -233,21 +261,6 @@ export function Design02Experience() {
           ))}
         </aside>
 
-        <div className="d02-hero">
-          <div key={current.id} className="d02-swap">
-            <p className="d02-kicker">
-              {String(current.index).padStart(2, "0")} · {current.short}
-            </p>
-            <h1>{current.name}</h1>
-            <p className="lede">{current.slogan}</p>
-            <p className="mission">{current.mission}</p>
-            <a className="d02-cta" href={current.href || "#contact"}>
-              {current.href ? "Visit website" : "Get in touch"}
-              <span aria-hidden>→</span>
-            </a>
-          </div>
-        </div>
-
         <div className="d02-features">
           {features.map((f) => (
             <article key={f.title}>
@@ -258,7 +271,7 @@ export function Design02Experience() {
           ))}
         </div>
 
-        <p className="d02-hint">Scroll to rotate · Hover a logo to enlarge · Click to focus</p>
+        <p className="d02-hint">Scroll to spin · Selected card expands with details</p>
       </div>
 
       <section className="d02-site" id="story">
@@ -306,6 +319,31 @@ export function Design02Experience() {
                 <p>{co.slogan}</p>
               </a>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="d02-site d02-esg" id="esg">
+        <div className="d02-wrap">
+          <p className="d02-kicker">{ESG.kicker}</p>
+          <h2>{ESG.title}</h2>
+          <p className="intro">{ESG.lead}</p>
+          <div className="d02-esg-film">
+            <EsgFilm />
+          </div>
+          <div className="d02-esg-copy">
+            <div>
+              <p>{ESG.body}</p>
+              <p>{ESG.involvement}</p>
+            </div>
+            <div className="d02-esg-facts">
+              {ESG.facts.map((item) => (
+                <article key={item.t}>
+                  <strong>{item.t}</strong>
+                  <p>{item.d}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       </section>

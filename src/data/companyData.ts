@@ -472,7 +472,7 @@ export const companyData: CompanyEntry[] = [
     name: "HaveLeh",
     short: "HaveLeh",
     slogan: "Personal & business protection, grouped with care",
-    logo: PLACEHOLDER_LOGO,
+    logo: logo("/brands/haveleh.png"),
     backdrop: "/scroll-frames/frame-0098.jpg",
     accentFrom: "#fb7185",
     accentTo: "#f97316",

@@ -4,6 +4,7 @@ const links = [
   { href: "#journey", label: "Film" },
   { href: "#businesses", label: "Businesses" },
   { href: "#about", label: "About" },
+  { href: "#esg", label: "ESG" },
   { href: "#contact", label: "Contact" },
 ];
 
@@ -18,7 +19,7 @@ export function Header() {
             width={200}
             height={70}
             priority
-            className="h-8 w-auto object-contain transition duration-500 ease-out group-hover:scale-105 sm:h-10"
+            className="h-[50px] w-[150px] object-contain transition duration-500 ease-out group-hover:scale-105"
           />
         </a>
         <nav className="d01-nav hidden items-center gap-7 md:flex" aria-label="Primary">

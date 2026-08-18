@@ -12,7 +12,7 @@ export function BusinessGrid() {
             Our businesses
           </p>
           <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-navy sm:text-4xl">
-            Seven ways we move.
+            Eight ways we move.
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-muted">
             Each unit has a clear role — from fleets and travel to engineering,

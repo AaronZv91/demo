@@ -5,6 +5,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { companyData } from "../../data/companyData";
+import { ESG } from "../../data/esg";
+import { EsgFilm } from "../../components/EsgFilm";
 import "./design03.css";
 
 if (typeof window !== "undefined") {
@@ -19,7 +21,10 @@ export function Design03Experience() {
   const stRef = useRef<ScrollTrigger | null>(null);
   const [active, setActive] = useState(0);
 
-  const companies = useMemo(() => companyData, []);
+  const companies = useMemo(
+    () => companyData.filter((c) => c.id !== "group"),
+    [],
+  );
 
   useEffect(() => {
     const pin = pinRef.current;
@@ -153,6 +158,8 @@ export function Design03Experience() {
 
   const current = companies[active] ?? companies[0];
   const stats = current.stats.slice(0, 2);
+  const group =
+    companyData.find((c) => c.id === "group") ?? companyData[0];
 
   return (
     <>
@@ -173,13 +180,13 @@ export function Design03Experience() {
         <header className="d03-bar">
           <a className="d03-logo" href="#stage">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brands/group.png" alt="" />
-            <span>Woodlands</span>
+            <img src="/brands/group.png" alt="Woodlands Group" />
           </a>
           <nav className="d03-nav" aria-label="Page">
             <a href="#stage">group</a>
             <a href="#stage">brands</a>
-            <a href="#contact">story</a>
+            <a href="#story">story</a>
+            <a href="#esg">esg</a>
             <a href="#contact">contacts</a>
           </nav>
           <div className="d03-actions">
@@ -197,7 +204,7 @@ export function Design03Experience() {
             {companies.map((co, i) => (
               <article
                 key={co.id}
-                className={`d03-card${i === active ? " is-center" : ""}`}
+                className={`d03-card${i === active ? " is-center" : ""}${co.id === "transport" ? " is-xl" : ""}`}
                 aria-label={co.name}
                 ref={(el) => {
                   if (el) cardsRef.current[i] = el;
@@ -271,6 +278,52 @@ export function Design03Experience() {
         </div>
         <p className="d03-hint">Scroll to slide</p>
       </div>
+
+      <section className="d03-story" id="story">
+        <div className="d03-wrap">
+          <p className="d03-kicker">Since 1974</p>
+          <h2>A homegrown group, still on the road.</h2>
+          <p className="d03-intro">
+            Woodlands Transport began with a handful of partners in 1974 and is now
+            Singapore’s largest private bus and construction-vehicle operator — more
+            than 800 vehicles and 800 people, with sister companies in travel,
+            engineering, pawnbroking, hospitality, technology, laundry, and protection.
+          </p>
+          <div className="d03-timeline">
+            {group.milestones.map((m) => (
+              <article key={`${m.year}-${m.label}`}>
+                <strong>{m.year}</strong>
+                <p>{m.label}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="d03-story d03-esg" id="esg">
+        <div className="d03-wrap">
+          <p className="d03-kicker">{ESG.kicker}</p>
+          <h2>{ESG.title}</h2>
+          <p className="d03-intro">{ESG.lead}</p>
+          <div className="d03-esg-film">
+            <EsgFilm />
+          </div>
+          <div className="d03-esg-copy">
+            <div>
+              <p>{ESG.body}</p>
+              <p>{ESG.involvement}</p>
+            </div>
+            <div className="d03-esg-facts">
+              {ESG.facts.map((item) => (
+                <article key={item.t}>
+                  <strong>{item.t}</strong>
+                  <p>{item.d}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section className="d03-contact" id="contact">
         <h2>Let’s talk</h2>

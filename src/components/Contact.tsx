@@ -102,6 +102,7 @@ export function Contact() {
               <option>The Bus Collective</option>
               <option>Plotigo</option>
               <option>Flash Laundry</option>
+              <option>HaveLeh</option>
               <option>General / Group</option>
             </select>
           </label>

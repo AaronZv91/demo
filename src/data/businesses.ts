@@ -313,6 +313,44 @@ export const BUSINESSES: BusinessNode[] = [
     phone: "+65 6559 8988",
     email: "jiawoei91@gmail.com",
     address: "Singapore",
+    progress: 0.9,
+  },
+  {
+    id: "haveleh",
+    index: 8,
+    name: "HaveLeh",
+    short: "HaveLeh",
+    tagline: "Personal & business protection, grouped with care",
+    summary:
+      "HaveLeh offers personal and business insurance — health, auto, and liability — for individuals, families, professionals, and SMEs. Advice sits beside the group’s transport, travel, and daily-life companies.",
+    highlight:
+      "Protection that sits next to the journeys people already take with us.",
+    services: [
+      {
+        title: "Health & life",
+        detail:
+          "Cover for individuals and families who want a trusted, local adviser.",
+      },
+      {
+        title: "Auto & liability",
+        detail:
+          "Protection that understands fleets, company cars, and daily commuting.",
+      },
+      {
+        title: "Business cover",
+        detail:
+          "Liability and operations cover for professionals and smaller firms.",
+      },
+      {
+        title: "One conversation",
+        detail:
+          "Insurance sitting beside transport, travel, and everyday Woodlands services.",
+      },
+    ],
+    logo: "/brands/haveleh.png",
+    phone: "+65 6559 8988",
+    email: "contact-us@wts.com.sg",
+    address: "8 Gul Circle, Singapore 629564",
     progress: 1,
   },
 ];
@@ -324,10 +362,6 @@ export const JOURNEY_NODES: BusinessNode[] = BUSINESSES.filter(
   ...b,
   progress: arr.length <= 1 ? 0 : i / (arr.length - 1),
 }));
-
-export const FRAME_COUNT = 267;
-export const FRAME_PATH = (n: number) =>
-  `/frames-full-hd/frame-${String(n).padStart(5, "0")}.jpg`;
 
 export const CONTACT = {
   email: "jiawoei91@gmail.com",
