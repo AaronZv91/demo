@@ -328,17 +328,6 @@ export function Design03Experience() {
         <div className="d03-frost is-on" aria-hidden />
 
         <header className="d03-bar">
-          <a className="d03-logo" href="#stage">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brands/group.png" alt="Woodlands Group" />
-          </a>
-          <nav className="d03-nav" aria-label="Page">
-            <a href="#stage">group</a>
-            <a href="#stage">brands</a>
-            <a href="#story">story</a>
-            <a href="#esg">esg</a>
-            <a href="#contact">contacts</a>
-          </nav>
           <div className="d03-actions">
             <a className="ghost" href="tel:+6565598988">
               call
@@ -347,6 +336,17 @@ export function Design03Experience() {
               enquire
             </a>
           </div>
+          <nav className="d03-nav" aria-label="Page">
+            <a href="#stage">Group</a>
+            <a href="#stage">Brands</a>
+            <a href="#story">Story</a>
+            <a href="#esg">ESG</a>
+            <a href="#contact">Contacts</a>
+          </nav>
+          <a className="d03-logo" href="#stage">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brands/group.png" alt="Woodlands Group" />
+          </a>
         </header>
 
         <div className="d03-scene">
