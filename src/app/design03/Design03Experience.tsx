@@ -54,6 +54,10 @@ export function Design03Experience() {
           syncTouchLerp: 0.085,
           touchInertiaExponent: 1.55,
           touchMultiplier: coarse ? 1.15 : 1,
+          allowNestedScroll: true,
+          prevent: (node) =>
+            node instanceof Element &&
+            Boolean(node.closest(".d03-rail, .d03-rail-track, .d03-rail-item")),
           autoRaf: false,
         });
         lenis.on("scroll", ScrollTrigger.update);
@@ -290,6 +294,96 @@ export function Design03Experience() {
       stage.removeEventListener("pointerup", onPointerUp);
       stage.removeEventListener("pointercancel", onPointerUp);
       stage.removeEventListener("click", onClickCapture, true);
+    };
+  }, []);
+
+  useEffect(() => {
+    const track = pinRef.current?.querySelector(
+      ".d03-rail-track",
+    ) as HTMLElement | null;
+    if (!track) return;
+
+    let dragging = false;
+    let startX = 0;
+    let startScroll = 0;
+    let moved = false;
+
+    const onStart = (clientX: number) => {
+      dragging = true;
+      moved = false;
+      startX = clientX;
+      startScroll = track.scrollLeft;
+    };
+
+    const onMove = (clientX: number, event: Event) => {
+      if (!dragging) return;
+      const dx = clientX - startX;
+      if (Math.abs(dx) > 4) moved = true;
+      track.scrollLeft = startScroll - dx;
+      event.preventDefault();
+      event.stopPropagation();
+    };
+
+    const onEnd = () => {
+      dragging = false;
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      e.stopPropagation();
+      onStart(e.touches[0].clientX);
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (!dragging || e.touches.length !== 1) return;
+      onMove(e.touches[0].clientX, e);
+    };
+    const onTouchEnd = (e: TouchEvent) => {
+      e.stopPropagation();
+      onEnd();
+    };
+
+    const onPointerDown = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
+      if (e.button !== 0) return;
+      onStart(e.clientX);
+      track.setPointerCapture?.(e.pointerId);
+    };
+    const onPointerMove = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
+      onMove(e.clientX, e);
+    };
+    const onPointerUp = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
+      onEnd();
+    };
+
+    const onClickCapture = (e: MouseEvent) => {
+      if (!moved) return;
+      e.preventDefault();
+      e.stopPropagation();
+      moved = false;
+    };
+
+    track.addEventListener("touchstart", onTouchStart, { passive: true });
+    track.addEventListener("touchmove", onTouchMove, { passive: false });
+    track.addEventListener("touchend", onTouchEnd);
+    track.addEventListener("touchcancel", onTouchEnd);
+    track.addEventListener("pointerdown", onPointerDown);
+    track.addEventListener("pointermove", onPointerMove, { passive: false });
+    track.addEventListener("pointerup", onPointerUp);
+    track.addEventListener("pointercancel", onPointerUp);
+    track.addEventListener("click", onClickCapture, true);
+
+    return () => {
+      track.removeEventListener("touchstart", onTouchStart);
+      track.removeEventListener("touchmove", onTouchMove);
+      track.removeEventListener("touchend", onTouchEnd);
+      track.removeEventListener("touchcancel", onTouchEnd);
+      track.removeEventListener("pointerdown", onPointerDown);
+      track.removeEventListener("pointermove", onPointerMove);
+      track.removeEventListener("pointerup", onPointerUp);
+      track.removeEventListener("pointercancel", onPointerUp);
+      track.removeEventListener("click", onClickCapture, true);
     };
   }, []);
 
