@@ -73,6 +73,11 @@ body {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0.06);
 }
 
+html:has(.d03),
+body:has(.d03) {
+  overscroll-behavior-y: none;
+}
+
 body:has(.d02),
 body:has(.d03) {
   background: #fff;

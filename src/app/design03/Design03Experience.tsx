@@ -19,12 +19,18 @@ export function Design03Experience() {
   const cardsRef = useRef<HTMLElement[]>([]);
   const lenisRef = useRef<Lenis | null>(null);
   const stRef = useRef<ScrollTrigger | null>(null);
+  const activeRef = useRef(0);
+  const goToIndexRef = useRef<(index: number) => void>(() => {});
   const [active, setActive] = useState(0);
 
   const companies = useMemo(
     () => companyData.filter((c) => c.id !== "group"),
     [],
   );
+
+  useEffect(() => {
+    activeRef.current = active;
+  }, [active]);
 
   useEffect(() => {
     const pin = pinRef.current;
@@ -38,9 +44,16 @@ export function Design03Experience() {
 
     if (!reduced) {
       try {
+        const coarse =
+          window.matchMedia("(pointer: coarse)").matches ||
+          "ontouchstart" in window;
         lenis = new Lenis({
-          duration: 1.15,
-          smoothWheel: true,
+          duration: coarse ? 1.05 : 1.15,
+          smoothWheel: !coarse,
+          syncTouch: coarse,
+          syncTouchLerp: 0.085,
+          touchInertiaExponent: 1.55,
+          touchMultiplier: coarse ? 1.15 : 1,
           autoRaf: false,
         });
         lenis.on("scroll", ScrollTrigger.update);
@@ -61,10 +74,14 @@ export function Design03Experience() {
       const w = window.innerWidth;
       const h = window.innerHeight;
       const phone = w < 640;
-      const tablet = w < 980;
+      const tablet = w < 1180;
       const radius = Math.max(
-        phone ? 128 : tablet ? 200 : 260,
-        Math.min(w * (phone ? 0.36 : 0.44), h * (phone ? 0.24 : tablet ? 0.32 : 0.4), 560),
+        phone ? 118 : tablet ? 176 : 260,
+        Math.min(
+          w * (phone ? 0.34 : tablet ? 0.38 : 0.44),
+          h * (phone ? 0.2 : tablet ? 0.28 : 0.4),
+          phone ? 420 : tablet ? 480 : 560,
+        ),
       );
       const offset = ((progress * n) % n + n) % n;
       const index = Math.round(offset) % n;
@@ -102,28 +119,34 @@ export function Design03Experience() {
     const st = ScrollTrigger.create({
       trigger: pin,
       start: "top top",
-      end: `+=${n * 1000}`,
+      end: `+=${n * 900}`,
       pin: true,
-      scrub: 1.15,
+      scrub: 1.05,
       anticipatePin: 1,
+      invalidateOnRefresh: true,
       snap: {
         snapTo: (value) => Math.round(value / step) * step,
-        duration: 0.55,
-        delay: 0.02,
+        duration: 0.5,
+        delay: 0.01,
         ease: "power3.out",
       },
       onUpdate: (self) => layout(self.progress),
     });
     stRef.current = st;
 
-    const onResize = () => {
+    const refresh = () => {
       layout(st.progress);
       ScrollTrigger.refresh();
     };
-    window.addEventListener("resize", onResize);
+    window.addEventListener("resize", refresh);
+    window.addEventListener("orientationchange", refresh);
+    const vv = window.visualViewport;
+    vv?.addEventListener("resize", refresh);
 
     return () => {
-      window.removeEventListener("resize", onResize);
+      window.removeEventListener("resize", refresh);
+      window.removeEventListener("orientationchange", refresh);
+      vv?.removeEventListener("resize", refresh);
       gsap.ticker.remove(ticker);
       lenis?.destroy();
       lenisRef.current = null;
@@ -155,6 +178,133 @@ export function Design03Experience() {
     if (lenis) lenis.scrollTo(y, { duration: 1.05 });
     else window.scrollTo({ top: y, behavior: "smooth" });
   };
+  goToIndexRef.current = goToIndex;
+
+  useEffect(() => {
+    const stage = pinRef.current;
+    if (!stage) return;
+
+    const THRESH = 36;
+    const LOCK = 10;
+    let startX = 0;
+    let startY = 0;
+    let tracking = false;
+    let axis: "h" | "v" | null = null;
+    let swiped = false;
+
+    const interactive = (target: EventTarget | null) => {
+      if (!(target instanceof Element)) return false;
+      return Boolean(
+        target.closest(
+          "a, button, .d03-rail, .d03-controls, .d03-detail.is-bottom, input, textarea",
+        ),
+      );
+    };
+
+    const begin = (x: number, y: number, target: EventTarget | null) => {
+      if (interactive(target)) return false;
+      tracking = true;
+      axis = null;
+      swiped = false;
+      startX = x;
+      startY = y;
+      return true;
+    };
+
+    const move = (x: number, y: number, event: Event) => {
+      if (!tracking) return;
+      const dx = x - startX;
+      const dy = y - startY;
+      if (!axis && (Math.abs(dx) > LOCK || Math.abs(dy) > LOCK)) {
+        axis = Math.abs(dx) > Math.abs(dy) * 1.1 ? "h" : "v";
+      }
+      if (axis === "h") {
+        event.preventDefault();
+      }
+    };
+
+    const end = (x: number) => {
+      if (!tracking) return;
+      const dx = x - startX;
+      const wasHorizontal = axis === "h";
+      tracking = false;
+      axis = null;
+      if (!wasHorizontal) return;
+      if (Math.abs(dx) < THRESH) return;
+      swiped = true;
+      if (dx < 0) goToIndexRef.current(activeRef.current + 1);
+      else goToIndexRef.current(activeRef.current - 1);
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      begin(e.touches[0].clientX, e.touches[0].clientY, e.target);
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (!tracking || e.touches.length !== 1) return;
+      move(e.touches[0].clientX, e.touches[0].clientY, e);
+    };
+    const onTouchEnd = (e: TouchEvent) => {
+      const t = e.changedTouches[0];
+      if (t) end(t.clientX);
+    };
+
+    const onPointerDown = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      begin(e.clientX, e.clientY, e.target);
+    };
+    const onPointerMove = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
+      move(e.clientX, e.clientY, e);
+    };
+    const onPointerUp = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
+      end(e.clientX);
+    };
+
+    const onClickCapture = (e: MouseEvent) => {
+      if (!swiped) return;
+      e.preventDefault();
+      e.stopPropagation();
+      swiped = false;
+    };
+
+    stage.addEventListener("touchstart", onTouchStart, { passive: true });
+    stage.addEventListener("touchmove", onTouchMove, { passive: false });
+    stage.addEventListener("touchend", onTouchEnd);
+    stage.addEventListener("touchcancel", onTouchEnd);
+    stage.addEventListener("pointerdown", onPointerDown);
+    stage.addEventListener("pointermove", onPointerMove, { passive: false });
+    stage.addEventListener("pointerup", onPointerUp);
+    stage.addEventListener("pointercancel", onPointerUp);
+    stage.addEventListener("click", onClickCapture, true);
+
+    return () => {
+      stage.removeEventListener("touchstart", onTouchStart);
+      stage.removeEventListener("touchmove", onTouchMove);
+      stage.removeEventListener("touchend", onTouchEnd);
+      stage.removeEventListener("touchcancel", onTouchEnd);
+      stage.removeEventListener("pointerdown", onPointerDown);
+      stage.removeEventListener("pointermove", onPointerMove);
+      stage.removeEventListener("pointerup", onPointerUp);
+      stage.removeEventListener("pointercancel", onPointerUp);
+      stage.removeEventListener("click", onClickCapture, true);
+    };
+  }, []);
+
+  useEffect(() => {
+    const track = pinRef.current?.querySelector(
+      ".d03-rail-track",
+    ) as HTMLElement | null;
+    const item = track?.querySelector(".d03-rail-item.is-active") as
+      | HTMLElement
+      | null;
+    if (!track || !item) return;
+    const left =
+      item.offsetLeft - (track.clientWidth - item.offsetWidth) / 2;
+    track.scrollTo({ left: Math.max(0, left), behavior: "smooth" });
+  }, [active]);
 
   const current = companies[active] ?? companies[0];
   const stats = current.stats.slice(0, 2);
@@ -258,6 +408,30 @@ export function Design03Experience() {
           </a>
         </div>
 
+        <nav className="d03-rail" aria-label="Branches">
+          <div className="d03-rail-inner">
+            <span className="d03-rail-label">Branches</span>
+            <div className="d03-rail-track" role="list">
+              {companies.map((co, i) => (
+                <button
+                  key={co.id}
+                  type="button"
+                  role="listitem"
+                  className={`d03-rail-item${i === active ? " is-active" : ""}`}
+                  aria-label={co.name}
+                  aria-current={i === active ? "true" : undefined}
+                  title={co.name}
+                  onClick={() => goToIndex(i)}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={co.logo} alt="" />
+                  <span>{co.short}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </nav>
+
         <div className="d03-controls">
           <button
             type="button"
@@ -276,7 +450,7 @@ export function Design03Experience() {
             ›
           </button>
         </div>
-        <p className="d03-hint">Scroll to slide</p>
+        <p className="d03-hint">Scroll or swipe</p>
       </div>
 
       <section className="d03-story" id="story">
