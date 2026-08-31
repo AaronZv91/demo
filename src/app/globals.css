@@ -654,18 +654,95 @@ body:has(.d03) {
 .values-heading {
   margin: 0;
   font-family: var(--font-d03-serif), var(--font-syne), ui-serif, Georgia, serif;
-  font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+  font-size: clamp(2.35rem, 5vw, 3.8rem);
   font-weight: 500;
   letter-spacing: -0.035em;
   color: #09090b;
   line-height: 1.15;
 }
 
+/* Bigger, prominent EPIC hero branding in the heading with Vercel mouseover interactive lighting */
+.epic-hero-interactive-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 8px;
+  vertical-align: baseline;
+  cursor: pointer;
+}
+
+.epic-hero-spotlight {
+  position: absolute;
+  width: 170px;
+  height: 170px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: multiply;
+  transition: opacity 0.2s ease;
+}
+
+.epic-hero-char {
+  position: relative;
+  z-index: 1;
+  font-size: 1.18em;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  display: inline-block;
+  padding: 0 1px;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), text-shadow 0.25s ease, color 0.2s ease;
+}
+
+.epic-hero-char:hover,
+.epic-hero-char.is-hovered {
+  transform: translateY(-4px) scale(1.15);
+}
+
+.epic-char-halo {
+  position: absolute;
+  inset: -6px -4px;
+  border-radius: 12px;
+  filter: blur(14px);
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+}
+
+.epic-letter-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 900;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.epic-letter-e {
+  color: #ef4444;
+}
+
+.epic-letter-p {
+  color: #f97316;
+}
+
+.epic-letter-i {
+  color: #eab308;
+}
+
+.epic-letter-c {
+  color: #22c55e;
+}
+
 .epic-text-gradient {
   background: linear-gradient(135deg, #ef4444 0%, #f97316 33%, #eab308 66%, #22c55e 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .values-subheading {

@@ -611,13 +611,34 @@ export function Design03Experience() {
       </section>
 
       <section className="d03-story d03-esg" id="esg">
+        {/* Luminous Green Energy Conduit linking the 50-year road into the ESG mission */}
+        <div className="d03-esg-portal-conduit" aria-hidden="true">
+          <div className="d03-conduit-stream" />
+          <div className="d03-conduit-node">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-500">
+              <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+              <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+            </svg>
+          </div>
+        </div>
+
         <div className="d03-wrap">
-          <p className="d03-kicker">{ESG.kicker}</p>
-          <h2>{ESG.title}</h2>
-          <p className="d03-intro">{ESG.lead}</p>
+          <div className="d03-esg-header">
+            <div className="d03-esg-badge-wrap">
+              <span className="d03-esg-pill">
+                <span className="d03-esg-pill-dot" />
+                Singapore Green Plan 2030 · Sustainability Mission
+              </span>
+            </div>
+            <p className="d03-kicker">{ESG.kicker}</p>
+            <h2 className="d03-esg-title">{ESG.title}</h2>
+            <p className="d03-intro">{ESG.lead}</p>
+          </div>
+
           <div className="d03-esg-film">
             <EsgFilm />
           </div>
+
           <div className="d03-esg-copy">
             <div>
               <p>{ESG.body}</p>
@@ -626,7 +647,10 @@ export function Design03Experience() {
             <div className="d03-esg-facts">
               {ESG.facts.map((item) => (
                 <article key={item.t}>
-                  <strong>{item.t}</strong>
+                  <div className="d03-fact-header">
+                    <span className="d03-fact-dot" />
+                    <strong>{item.t}</strong>
+                  </div>
                   <p>{item.d}</p>
                 </article>
               ))}

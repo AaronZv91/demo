@@ -122,7 +122,7 @@ export function RoadmapRoadTimeline() {
 
   // Spacing per milestone item (height in pixels on canvas)
   const ITEM_HEIGHT = 290;
-  const totalSvgHeight = count * ITEM_HEIGHT + 200;
+  const totalSvgHeight = count * ITEM_HEIGHT + 420;
 
   // Compute winding waypoints for SVG path
   const waypoints = useMemo(() => {
@@ -141,7 +141,7 @@ export function RoadmapRoadTimeline() {
     });
   }, [milestones, ITEM_HEIGHT]);
 
-  // Construct smooth bezier SVG path data
+  // Construct smooth bezier SVG path data leading into the Sustainability Green Gateway
   const svgPathData = useMemo(() => {
     if (waypoints.length === 0) return "";
     let d = `M 50 0 C 50 50, ${waypoints[0].xPercent} 80, ${waypoints[0].xPercent} ${waypoints[0].y}`;
@@ -158,9 +158,9 @@ export function RoadmapRoadTimeline() {
       prevY = curY;
     }
 
-    // End runout
+    // End runout flowing directly to the center sustainability gateway
     const lastY = waypoints[waypoints.length - 1].y;
-    d += ` C ${prevX} ${lastY + 70}, 50 ${lastY + 110}, 50 ${lastY + 160}`;
+    d += ` C ${prevX} ${lastY + 80}, 50 ${lastY + 140}, 50 ${lastY + 300}`;
     return d;
   }, [waypoints]);
 
@@ -250,6 +250,10 @@ export function RoadmapRoadTimeline() {
   }, [milestones]);
 
   const activeMilestone = milestones[activeIdx] || milestones[0];
+  const isNearDestination = scrollProgress >= 0.93;
+  const vehicleGlowColor = isNearDestination ? "#10b981" : activeMilestone.color;
+  const lastWaypoint = waypoints[waypoints.length - 1];
+  const portalY = lastWaypoint ? lastWaypoint.y + 190 : 6700;
 
   return (
     <div className="d03-roadmap-wrapper" ref={containerRef}>
@@ -258,11 +262,19 @@ export function RoadmapRoadTimeline() {
         <div className="d03-road-hud-inner">
           <div className="d03-road-hud-header">
             <div className="flex items-center gap-3">
-              <span className="d03-hud-pulse" style={{ backgroundColor: activeMilestone.color }} />
+              <span className="d03-hud-pulse" style={{ backgroundColor: vehicleGlowColor }} />
               <div>
                 <span className="d03-hud-kicker">1974 ─── 50 Years Road ─── 2024</span>
                 <h4 className="d03-hud-title">
-                  Year {activeMilestone.year} · <span className="opacity-80">{activeMilestone.title}</span>
+                  {isNearDestination ? (
+                    <span className="text-emerald-700 font-semibold">
+                      Destination 2030+ · <span className="opacity-90">Singapore Green Plan</span>
+                    </span>
+                  ) : (
+                    <>
+                      Year {activeMilestone.year} · <span className="opacity-80">{activeMilestone.title}</span>
+                    </>
+                  )}
                 </h4>
               </div>
             </div>
@@ -274,13 +286,26 @@ export function RoadmapRoadTimeline() {
                     key={d.decade}
                     type="button"
                     className={`d03-hud-decade-btn ${
-                      activeMilestone.decade === d.decade ? "is-active" : ""
+                      activeMilestone.decade === d.decade && !isNearDestination ? "is-active" : ""
                     }`}
                     onClick={() => scrollToMilestone(d.index)}
                   >
                     {d.decade}
                   </button>
                 ))}
+                <button
+                  type="button"
+                  className={`d03-hud-decade-btn d03-hud-green-btn ${
+                    isNearDestination ? "is-active" : ""
+                  }`}
+                  onClick={() => {
+                    const esg = document.getElementById("esg");
+                    if (esg) esg.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  title="Singapore Green Plan"
+                >
+                  🌱 2030+ ESG
+                </button>
               </div>
 
               <div className="d03-hud-steppers">
@@ -361,8 +386,10 @@ export function RoadmapRoadTimeline() {
 
               <linearGradient id="roadGlow" x1="0%" y1="0%" x2="0%" y2="100%">
                 <stop offset="0%" stopColor="#0284c7" />
-                <stop offset="50%" stopColor="#8b5cf6" />
-                <stop offset="100%" stopColor="#eab308" />
+                <stop offset="35%" stopColor="#8b5cf6" />
+                <stop offset="70%" stopColor="#eab308" />
+                <stop offset="90%" stopColor="#10b981" />
+                <stop offset="100%" stopColor="#059669" />
               </linearGradient>
 
               <filter id="roadShadow" x="-20%" y="-20%" width="140%" height="140%">
@@ -448,10 +475,10 @@ export function RoadmapRoadTimeline() {
               transform: `translate(-50%, -50%) rotate(${carPos.angle - 90}deg)`,
             }}
           >
-            <div className="d03-vehicle-bus">
+            <div className={`d03-vehicle-bus ${isNearDestination ? "is-destination" : ""}`}>
               <div
                 className="d03-vehicle-headlights"
-                style={{ borderLeftColor: `${activeMilestone.color}99` }}
+                style={{ borderLeftColor: `${vehicleGlowColor}cc` }}
               />
               <div className="d03-vehicle-body">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -460,7 +487,7 @@ export function RoadmapRoadTimeline() {
                   alt="Woodlands 50th Mascot"
                   className="d03-mascot-bus-img"
                   style={{
-                    filter: `drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 3px #ffffff) drop-shadow(0 0 8px ${activeMilestone.color}) drop-shadow(0 8px 18px rgba(0,0,0,0.5))`,
+                    filter: `drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 3px #ffffff) drop-shadow(0 0 10px ${vehicleGlowColor}) drop-shadow(0 8px 18px rgba(0,0,0,0.5))`,
                   }}
                 />
               </div>
@@ -605,6 +632,60 @@ export function RoadmapRoadTimeline() {
                 </div>
               );
             })}
+
+            {/* Destination Gateway into ESG & Sustainability */}
+            <div
+              className={`d03-road-gateway ${isNearDestination ? "is-active" : ""}`}
+              style={{ top: `${portalY}px` }}
+            >
+              {/* Glowing Energy Aura on Road Centerline */}
+              <div className="d03-gateway-aura">
+                <div className="d03-gateway-pulse-ring d03-ring-1" />
+                <div className="d03-gateway-pulse-ring d03-ring-2" />
+                <div className="d03-gateway-pulse-ring d03-ring-3" />
+                <div className="d03-gateway-icon-badge">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-emerald-500">
+                    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+                    <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Destination Glassmorphic Gateway Card */}
+              <div className="d03-gateway-card">
+                <div className="d03-gateway-header">
+                  <span className="d03-gateway-tag">
+                    <span className="d03-gateway-dot" />
+                    2024 & Beyond · Next Horizon
+                  </span>
+                  <span className="d03-gateway-year">2030+</span>
+                </div>
+
+                <h3 className="d03-gateway-heading">
+                  Driving Singapore’s Sustainable Future
+                </h3>
+                <p className="d03-gateway-lead">
+                  50 years of road stewardship now powers national climate goals — electrifying fleets, scaling solar micro-grids, and upcycling mobility for a cleaner Singapore.
+                </p>
+
+                <button
+                  type="button"
+                  className="d03-gateway-btn"
+                  onClick={() => {
+                    const esgSection = document.getElementById("esg");
+                    if (esgSection) {
+                      esgSection.scrollIntoView({ behavior: "smooth" });
+                    }
+                  }}
+                  aria-label="Proceed to ESG and Sustainability Mission"
+                >
+                  <span>Explore ESG & Sustainability Mission</span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="d03-gateway-btn-arrow">
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       ) : (

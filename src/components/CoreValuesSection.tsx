@@ -1,8 +1,99 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { CORE_VALUES_DATA } from "../data/coreValues";
+
+// Interactive Vercel-style interactive lighting for the top EPIC hero character badges with 2-way card sync
+function InteractiveEpicHero({
+  activeIdx,
+  onHoverValue,
+}: {
+  activeIdx: number | null;
+  onHoverValue?: (idx: number | null) => void;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
+  const [activeLetter, setActiveLetter] = useState<number | null>(null);
+
+  const letters = [
+    { letter: "E", color: "#ef4444", bgLight: "rgba(239, 68, 68, 0.12)", index: 0, glow: "rgba(239, 68, 68, 0.45)" },
+    { letter: "P", color: "#f97316", bgLight: "rgba(249, 115, 22, 0.12)", index: 1, glow: "rgba(249, 115, 22, 0.45)" },
+    { letter: "I", color: "#eab308", bgLight: "rgba(234, 179, 8, 0.14)", index: 2, glow: "rgba(234, 179, 8, 0.45)" },
+    { letter: "C", color: "#22c55e", bgLight: "rgba(34, 197, 94, 0.12)", index: 3, glow: "rgba(34, 197, 94, 0.45)" },
+  ];
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    setMousePos({ x, y });
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setMousePos(null);
+    setActiveLetter(null);
+    if (onHoverValue) onHoverValue(null);
+  }, [onHoverValue]);
+
+  // Current active letter index is either the directly hovered letter or the hovered card from below
+  const currentActiveIdx = activeLetter !== null ? activeLetter : activeIdx;
+  const activeColor = currentActiveIdx !== null ? letters[currentActiveIdx].color : "#f97316";
+
+  return (
+    <span
+      ref={containerRef}
+      className="epic-hero-interactive-wrap"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Vercel-like dynamic spotlight aura behind letters */}
+      {mousePos && (
+        <span
+          className="epic-hero-spotlight"
+          style={{
+            left: `${mousePos.x}px`,
+            top: `${mousePos.y}px`,
+            background: `radial-gradient(circle 85px at center, ${activeColor}55 0%, ${activeColor}15 45%, transparent 75%)`,
+          }}
+        />
+      )}
+
+      {letters.map((item, idx) => {
+        const isCurrentActive = currentActiveIdx === idx;
+        return (
+          <span
+            key={item.letter}
+            className={`epic-hero-char epic-char-${item.letter.toLowerCase()} ${
+              isCurrentActive ? "is-hovered" : ""
+            }`}
+            style={{
+              color: item.color,
+              textShadow: isCurrentActive
+                ? `0 0 28px ${item.glow}, 0 0 12px ${item.color}, 0 4px 14px rgba(0,0,0,0.18)`
+                : `0 0 10px ${item.color}25`,
+            }}
+            onMouseEnter={() => {
+              setActiveLetter(idx);
+              if (onHoverValue) onHoverValue(idx);
+            }}
+          >
+            {item.letter}
+            {/* Ambient light ring on hover or card hover */}
+            <span
+              className="epic-char-halo"
+              style={{
+                backgroundColor: item.color,
+                opacity: isCurrentActive ? 0.42 : 0,
+              }}
+            />
+          </span>
+        );
+      })}
+    </span>
+  );
+}
 
 export function CoreValuesSection({ variant = "d03" }: { variant?: "d01" | "d02" | "d03" }) {
   const [activeTab, setActiveTab] = useState<number | null>(null);
@@ -15,7 +106,12 @@ export function CoreValuesSection({ variant = "d03" }: { variant?: "d01" | "d02"
         <div className="values-header">
           <p className="values-kicker">Guiding Principles · Our Foundation</p>
           <h2 className="values-heading">
-            Driven by our <span className="epic-text-gradient">EPIC</span> core values.
+            Driven by our{" "}
+            <InteractiveEpicHero
+              activeIdx={activeTab}
+              onHoverValue={(idx) => setActiveTab(idx)}
+            />{" "}
+            core values.
           </h2>
           <p className="values-subheading">
             For over fifty years, our purpose and day-to-day decisions have been anchored by a steadfast commitment to people, ethical standards, and continuous progress.
@@ -41,7 +137,7 @@ export function CoreValuesSection({ variant = "d03" }: { variant?: "d01" | "d02"
           </div>
         </div>
 
-        {/* 4 EPIC Values Grid */}
+        {/* 4 EPIC Values Grid (Restored to clean classic format) */}
         <div className="epic-cards-grid">
           {data.values.map((v, i) => {
             const isHovered = activeTab === i;
