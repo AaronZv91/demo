@@ -7,6 +7,7 @@ import Lenis from "lenis";
 import { companyData } from "../../data/companyData";
 import { ESG } from "../../data/esg";
 import { EsgFilm } from "../../components/EsgFilm";
+import { CoreValuesSection } from "../../components/CoreValuesSection";
 import "./design02.css";
 
 if (typeof window !== "undefined") {
@@ -347,6 +348,8 @@ export function Design02Experience() {
           </div>
         </div>
       </section>
+
+      <CoreValuesSection variant="d02" />
 
       <section className="d02-contact" id="contact">
         <div className="d02-wrap">

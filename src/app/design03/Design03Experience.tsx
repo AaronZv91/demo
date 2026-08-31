@@ -7,6 +7,8 @@ import Lenis from "lenis";
 import { companyData } from "../../data/companyData";
 import { ESG } from "../../data/esg";
 import { EsgFilm } from "../../components/EsgFilm";
+import { RoadmapRoadTimeline } from "./RoadmapRoadTimeline";
+import { CoreValuesSection } from "../../components/CoreValuesSection";
 import "./design03.css";
 
 if (typeof window !== "undefined") {
@@ -57,7 +59,11 @@ export function Design03Experience() {
           allowNestedScroll: true,
           prevent: (node) =>
             node instanceof Element &&
-            Boolean(node.closest(".d03-rail, .d03-rail-track, .d03-rail-item")),
+            Boolean(
+              node.closest(
+                ".d03-rail, .d03-rail-track, .d03-rail-item, .d03-chronicle-years",
+              ),
+            ),
           autoRaf: false,
         });
         lenis.on("scroll", ScrollTrigger.update);
@@ -402,8 +408,6 @@ export function Design03Experience() {
 
   const current = companies[active] ?? companies[0];
   const stats = current.stats.slice(0, 2);
-  const group =
-    companyData.find((c) => c.id === "group") ?? companyData[0];
 
   return (
     <>
@@ -435,6 +439,7 @@ export function Design03Experience() {
             <a href="#stage">Brands</a>
             <a href="#story">Story</a>
             <a href="#esg">ESG</a>
+            <a href="#values">Values</a>
             <a href="#contact">Contacts</a>
           </nav>
           <a className="d03-logo" href="#stage">
@@ -502,9 +507,8 @@ export function Design03Experience() {
           </a>
         </div>
 
-        <nav className="d03-rail" aria-label="Branches">
+        <nav className="d03-rail" aria-label="Branches timeline">
           <div className="d03-rail-inner">
-            <span className="d03-rail-label">Branches</span>
             <div className="d03-rail-track" role="list">
               {companies.map((co, i) => (
                 <button
@@ -514,12 +518,13 @@ export function Design03Experience() {
                   className={`d03-rail-item${i === active ? " is-active" : ""}`}
                   aria-label={co.name}
                   aria-current={i === active ? "true" : undefined}
-                  title={co.name}
+                  title={`${co.name} (Est. ${co.founded})`}
                   onClick={() => goToIndex(i)}
                 >
+                  <span className="d03-rail-dot" aria-hidden="true" />
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={co.logo} alt="" />
-                  <span>{co.short}</span>
+                  <img className="d03-rail-icon" src={co.logo} alt="" aria-hidden="true" />
+                  <span className="d03-rail-name">{co.short}</span>
                 </button>
               ))}
             </div>
@@ -549,22 +554,17 @@ export function Design03Experience() {
 
       <section className="d03-story" id="story">
         <div className="d03-wrap">
-          <p className="d03-kicker">Since 1974</p>
-          <h2>A homegrown group, still on the road.</h2>
-          <p className="d03-intro">
-            Woodlands Transport began with a handful of partners in 1974 and is now
-            Singapore’s largest private bus and construction-vehicle operator — more
-            than 800 vehicles and 800 people, with sister companies in travel,
-            engineering, pawnbroking, hospitality, technology, laundry, and protection.
-          </p>
-          <div className="d03-timeline">
-            {group.milestones.map((m) => (
-              <article key={`${m.year}-${m.label}`}>
-                <strong>{m.year}</strong>
-                <p>{m.label}</p>
-              </article>
-            ))}
+          <div className="d03-story-head">
+            <div>
+              <p className="d03-kicker">Since 1974 · 50 Years Roadmap</p>
+              <h2>Fifty years of keeping Singapore moving.</h2>
+            </div>
+            <p className="d03-intro">
+              Drive through five decades of milestones — from Mandai Kampong bus partnerships to an integrated group powering public mobility, engineering, and national infrastructure.
+            </p>
           </div>
+
+          <RoadmapRoadTimeline />
         </div>
       </section>
 
@@ -592,6 +592,8 @@ export function Design03Experience() {
           </div>
         </div>
       </section>
+
+      <CoreValuesSection variant="d03" />
 
       <section className="d03-contact" id="contact">
         <h2>Let’s talk</h2>
