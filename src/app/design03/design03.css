@@ -393,7 +393,7 @@
 .d03-detail.is-bottom {
   left: 50%;
   bottom: 8.6rem;
-  width: min(560px, 78vw);
+  width: min(720px, 86vw);
   transform: translate(-50%, 28px);
   text-align: center;
   padding: 0;

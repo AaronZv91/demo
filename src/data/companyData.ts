@@ -113,7 +113,7 @@ export const companyData: CompanyEntry[] = [
     founded: "1974",
     ...HQ,
     mission:
-      "Founded in 1974 — Singapore’s largest private operator for school and corporate bus charters, airport partnerships, and heavy construction haulage. Fleet includes buses, tour coaches, lorry cranes, prime movers, mixers, cement tankers, and tipper trucks.",
+      "School & Corporate Bus Charters | Airport Transport Partnerships | Heavy Construction Haulage & Vehicle Fleet (Lorry Cranes, Prime Movers, Mixers & Tankers)",
     milestones: [
       { year: "1974", label: "Transport beginnings" },
       { year: "1978", label: "Construction haulage added" },
@@ -166,7 +166,7 @@ export const companyData: CompanyEntry[] = [
     phone: "+65 6559 8988",
     email: "contact-us@wts.com.sg",
     mission:
-      "Incorporated in 1989, WTS Travel & Tours is an established Singapore agency for cruises, overseas packages, air-ticketing, hotels, inbound tours, and more than a decade of MICE and incentive groups.",
+      "Cruises | Overseas Packages | Air-Ticketing & Hotel Reservations | Inbound Tours | MICE & Incentive Groups",
     milestones: [
       { year: "1989", label: "Travel arm incorporated" },
       { year: "1998", label: "Inbound Singapore desk opens" },
@@ -219,7 +219,7 @@ export const companyData: CompanyEntry[] = [
     phone: "+65 6559 8988",
     email: "contact-us@wts.com.sg",
     mission:
-      "Set up in 2005 as the group’s engineering arm — workshops at Gul Circle and Kaki Bukit for preventive care, accident repairs, electrical and air-con work, spray painting, tyres, and islandwide recovery.",
+      "Preventive Care | Accident Repairs | Electrical & Air-Con Work | Spray Painting & Tyres | Islandwide Recovery",
     milestones: [
       { year: "2005", label: "Engineering subsidiary formed" },
       { year: "2009", label: "Kaki Bukit workshop opens" },
@@ -271,7 +271,7 @@ export const companyData: CompanyEntry[] = [
     phone: "+65 6559 8988",
     email: "contact-us@wts.com.sg",
     mission:
-      "CashBox is the group’s licensed pawnbroking arm — a one-stop provider of short-term loans against valuables, with islandwide storefronts and trained valuation teams who treat personal finance with privacy and clarity.",
+      "Licensed Pawnbroking | Short-Term Loans Against Valuables | Professional Valuation | Islandwide Storefront Network",
     milestones: [
       { year: "2012", label: "First CashBox outlet opens" },
       { year: "2016", label: "Islandwide store network" },
@@ -325,7 +325,7 @@ export const companyData: CompanyEntry[] = [
     phone: "+65 6559 8988",
     email: "stay@thebuscollective.com",
     mission:
-      "Opened in 2023 in Changi Village — Southeast Asia’s first resort hotel rebuilt from decommissioned public buses. About 20 king suites (~45㎡) with patio BBQ, hawker culture next door, and a circular-economy staycation story.",
+      "Bus-Repurposed Resort Suites (~45m²) | Patio BBQ | Eco-Friendly Staycations | Local Hawker & Culture Experiences",
     milestones: [
       { year: "2021", label: "Concept and bus salvage" },
       { year: "2022", label: "Changi Village site works" },
@@ -378,7 +378,7 @@ export const companyData: CompanyEntry[] = [
     phone: "+65 9650 6326",
     email: "it@plotigo.app",
     mission:
-      "Plotigo is the group’s technology company — born from real transport operations. School-bus parent apps, booking and dispatch, route optimisation, gantry access, kiosk ticketing, and AI-assisted surveillance for fleets and facilities.",
+      "School-Bus Parent Apps | Booking & Dispatch | Route Optimisation | Gantry Access & Kiosk Ticketing | AI Fleet & Facility Surveillance",
     milestones: [
       { year: "2020", label: "Tech arm launches" },
       { year: "2021", label: "School-bus parent PWA" },
@@ -430,7 +430,7 @@ export const companyData: CompanyEntry[] = [
     phone: "+65 6559 8988",
     email: "contact-us@wts.com.sg",
     mission:
-      "Established in 2005, Flash Laundry specialises in commercial laundry and dry cleaning for hotels, F&B, and institutions. Pickup and return rhythms follow occupancy — backed by the group’s logistics DNA.",
+      "Commercial Laundry | Dry Cleaning | Hotel & F&B Linen Services | Flexible Scheduled Pickup & Delivery",
     milestones: [
       { year: "2005", label: "Laundry established" },
       { year: "2011", label: "Hospitality linen programmes" },
@@ -482,7 +482,7 @@ export const companyData: CompanyEntry[] = [
     phone: "+65 6559 8988",
     email: "contact-us@wts.com.sg",
     mission:
-      "HaveLeh offers personal and business insurance — health, auto, and liability — for individuals, families, professionals, and SMEs. Advice sits beside the group’s transport, travel, and daily-life companies.",
+      "Health Insurance | Auto Insurance | Business Liability | Personal & SME Insurance Advisory",
     milestones: [
       { year: "2021", label: "Protection desk opens" },
       { year: "2022", label: "SME liability suite" },
