@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Outfit, Syne } from "next/font/google";
-import { DesignSwitcher } from "../components/DesignSwitcher";
 import { FloatingSocials } from "../components/FloatingSocials";
 import "./globals.css";
 
@@ -35,7 +34,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${outfit.variable} ${syne.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
-        <DesignSwitcher />
         {children}
         <FloatingSocials />
       </body>
