@@ -166,31 +166,41 @@ export function RoadmapRoadTimeline() {
 
   // Scroll listener to update car position and active milestone
   useEffect(() => {
-    const handleScroll = () => {
+    if (!mounted) return;
+    let rafId: number;
+
+    const updatePosition = () => {
       const el = containerRef.current;
       const path = pathRef.current;
       if (!el || !path) return;
 
       const rect = el.getBoundingClientRect();
       const windowHeight = window.innerHeight;
-      const totalDist = rect.height - windowHeight * 0.5;
-      const currentPassed = Math.max(0, -rect.top + windowHeight * 0.35);
+      
+      // Calculate progress relative to the active viewport reading area (center-upper third)
+      const viewportTrigger = windowHeight * 0.45;
+      const totalDist = rect.height - viewportTrigger;
+      const currentPassed = -rect.top + viewportTrigger;
       const rawProgress = Math.min(1, Math.max(0, currentPassed / (totalDist || 1)));
 
       setScrollProgress(rawProgress);
 
       const pathLength = path.getTotalLength();
-      const currentLength = rawProgress * pathLength;
-      const point = path.getPointAtLength(currentLength);
-      const aheadPoint = path.getPointAtLength(
-        Math.min(pathLength, currentLength + 6),
-      );
+      if (pathLength > 0) {
+        const currentLength = rawProgress * pathLength;
+        const point = path.getPointAtLength(currentLength);
+        
+        // Calculate tangent vector along the SVG path for smooth car orientation
+        const delta = 4;
+        const pAhead = path.getPointAtLength(Math.min(pathLength, currentLength + delta));
+        const pBehind = path.getPointAtLength(Math.max(0, currentLength - delta));
 
-      const dx = aheadPoint.x - point.x;
-      const dy = aheadPoint.y - point.y;
-      const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
+        const dx = pAhead.x - pBehind.x;
+        const dy = pAhead.y - pBehind.y;
+        const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
 
-      setCarPos({ x: point.x, y: point.y, angle });
+        setCarPos({ x: point.x, y: point.y, angle });
+      }
 
       // Identify the closest milestone
       const closestIdx = Math.min(
@@ -200,15 +210,23 @@ export function RoadmapRoadTimeline() {
       setActiveIdx(closestIdx);
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleScroll, { passive: true });
-    handleScroll();
+    let isDestroyed = false;
+
+    const onScrollOrFrame = () => {
+      if (isDestroyed) return;
+      updatePosition();
+      rafId = requestAnimationFrame(onScrollOrFrame);
+    };
+
+    rafId = requestAnimationFrame(onScrollOrFrame);
+    window.addEventListener("resize", updatePosition, { passive: true });
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
+      isDestroyed = true;
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", updatePosition);
     };
-  }, [count]);
+  }, [mounted, count]);
 
   const scrollToMilestone = (index: number) => {
     setActiveIdx(index);
@@ -430,16 +448,10 @@ export function RoadmapRoadTimeline() {
               transform: `translate(-50%, -50%) rotate(${carPos.angle - 90}deg)`,
             }}
           >
-            <div
-              className="d03-vehicle-bus"
-              style={{
-                borderColor: activeMilestone.color,
-                boxShadow: `0 0 16px ${activeMilestone.color}66, 0 8px 24px rgba(0,0,0,0.3)`,
-              }}
-            >
+            <div className="d03-vehicle-bus">
               <div
                 className="d03-vehicle-headlights"
-                style={{ borderLeftColor: `${activeMilestone.color}88` }}
+                style={{ borderLeftColor: `${activeMilestone.color}99` }}
               />
               <div className="d03-vehicle-body">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -447,6 +459,9 @@ export function RoadmapRoadTimeline() {
                   src="/mascot-bus.png"
                   alt="Woodlands 50th Mascot"
                   className="d03-mascot-bus-img"
+                  style={{
+                    filter: `drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 3px #ffffff) drop-shadow(0 0 8px ${activeMilestone.color}) drop-shadow(0 8px 18px rgba(0,0,0,0.5))`,
+                  }}
                 />
               </div>
             </div>

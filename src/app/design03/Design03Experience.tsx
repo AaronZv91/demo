@@ -66,7 +66,10 @@ export function Design03Experience() {
             ),
           autoRaf: false,
         });
-        lenis.on("scroll", ScrollTrigger.update);
+        lenis.on("scroll", () => {
+          ScrollTrigger.update();
+          window.dispatchEvent(new Event("scroll"));
+        });
         gsap.ticker.add(ticker);
         gsap.ticker.lagSmoothing(0);
         lenisRef.current = lenis;
