@@ -434,7 +434,7 @@ export function RoadmapRoadTimeline() {
               className="d03-vehicle-bus"
               style={{
                 borderColor: activeMilestone.color,
-                boxShadow: `0 0 16px ${activeMilestone.color}66, 0 8px 24px rgba(0,0,0,0.4)`,
+                boxShadow: `0 0 16px ${activeMilestone.color}66, 0 8px 24px rgba(0,0,0,0.3)`,
               }}
             >
               <div
@@ -442,12 +442,12 @@ export function RoadmapRoadTimeline() {
                 style={{ borderLeftColor: `${activeMilestone.color}88` }}
               />
               <div className="d03-vehicle-body">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.2" className="w-3.5 h-3.5">
-                  <rect x="3" y="4" width="18" height="14" rx="2" />
-                  <line x1="3" y1="10" x2="21" y2="10" />
-                  <circle cx="7" cy="18" r="1.5" fill="#fff" />
-                  <circle cx="17" cy="18" r="1.5" fill="#fff" />
-                </svg>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/mascot-bus.png"
+                  alt="Woodlands 50th Mascot"
+                  className="d03-mascot-bus-img"
+                />
               </div>
             </div>
           </div>

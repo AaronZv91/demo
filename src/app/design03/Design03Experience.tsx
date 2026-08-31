@@ -102,7 +102,9 @@ export function Design03Experience() {
 
       cardsRef.current.forEach((el, i) => {
         if (!el) return;
-        const theta = (i / n) * Math.PI * 2 - rotation;
+        const rawTheta = (i / n) * Math.PI * 2 - rotation;
+        // Normalize theta to [-PI, PI] so 3D rotationY wraps continuously and never flips backwards
+        const theta = Math.atan2(Math.sin(rawTheta), Math.cos(rawTheta));
         const x = Math.sin(theta) * radius;
         const z = Math.cos(theta) * radius - radius * 0.42;
         const face = (Math.cos(theta) + 1) / 2;
@@ -169,23 +171,48 @@ export function Design03Experience() {
     const n = companies.length;
     const target = ((index % n) + n) % n;
     const st = stRef.current;
-    const current = (st?.progress ?? 0) * n;
-    const options = [target, target + n, target - n];
-    let best = target;
-    let bestDist = Infinity;
-    for (const option of options) {
-      const dist = Math.abs(option - current);
-      if (dist < bestDist) {
-        bestDist = dist;
-        best = option;
+    if (!st) {
+      setActive(target);
+      return;
+    }
+
+    const currentP = st.progress ?? 0;
+    const currentVirtualIdx = currentP * n;
+
+    // Candidates in virtual index space to find shortest rotational distance
+    const candidates = [target - n, target, target + n, target + 2 * n, target - 2 * n];
+    let bestIdx = target;
+    let minDist = Infinity;
+    for (const c of candidates) {
+      const dist = Math.abs(c - currentVirtualIdx);
+      if (dist < minDist) {
+        minDist = dist;
+        bestIdx = c;
       }
     }
-    let p = best / n;
-    while (p < 0) p += 1;
-    while (p > 1) p -= 1;
-    const y = st ? st.start + p * (st.end - st.start) : 0;
+
+    let targetP = bestIdx / n;
+
+    // If targetP is outside [0, 1], wrap seamlessly
+    if (targetP > 1) {
+      const wrappedCurrentP = ((currentP % 1) + 1) % 1;
+      const immediateY = st.start + wrappedCurrentP * (st.end - st.start);
+      const lenis = lenisRef.current;
+      if (lenis) lenis.scrollTo(immediateY, { immediate: true });
+      else window.scrollTo({ top: immediateY, behavior: "instant" });
+      targetP = targetP - 1;
+    } else if (targetP < 0) {
+      const wrappedCurrentP = ((currentP % 1) + 1) % 1;
+      const immediateY = st.start + (wrappedCurrentP === 0 ? 1 : wrappedCurrentP) * (st.end - st.start);
+      const lenis = lenisRef.current;
+      if (lenis) lenis.scrollTo(immediateY, { immediate: true });
+      else window.scrollTo({ top: immediateY, behavior: "instant" });
+      targetP = targetP + 1;
+    }
+
+    const y = st.start + Math.max(0, Math.min(1, targetP)) * (st.end - st.start);
     const lenis = lenisRef.current;
-    if (lenis) lenis.scrollTo(y, { duration: 1.05 });
+    if (lenis) lenis.scrollTo(y, { duration: 0.85 });
     else window.scrollTo({ top: y, behavior: "smooth" });
   };
   goToIndexRef.current = goToIndex;
@@ -538,7 +565,9 @@ export function Design03Experience() {
             aria-label="Previous brand"
             onClick={() => goToIndex(active - 1)}
           >
-            ‹
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
           </button>
           <button
             type="button"
@@ -546,7 +575,9 @@ export function Design03Experience() {
             aria-label="Next brand"
             onClick={() => goToIndex(active + 1)}
           >
-            ›
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
           </button>
         </div>
         <p className="d03-hint">Scroll or swipe</p>

@@ -508,63 +508,58 @@
 .d03-controls {
   position: absolute;
   left: 50%;
-  bottom: 1.35rem;
-  z-index: 8;
+  top: calc(50% + 160px);
+  z-index: 10;
   display: flex;
-  gap: 12px;
+  align-items: center;
+  gap: 14px;
   transform: translateX(-50%);
+  pointer-events: auto;
 }
 
 .d03-controls button {
-  width: 46px;
-  height: 46px;
-  border: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(16, 16, 20, 0.12);
   border-radius: 50%;
-  font-size: 1.1rem;
-  color: #fff;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #18181b;
   cursor: pointer;
-  transition: transform 0.4s var(--d03-ease), background 0.3s ease,
-    box-shadow 0.4s var(--d03-ease);
+  box-shadow: 0 6px 20px rgba(16, 16, 20, 0.09), 0 1px 3px rgba(16, 16, 20, 0.05);
+  transition: transform 0.25s var(--d03-ease), background 0.2s ease, color 0.2s ease,
+    border-color 0.2s ease, box-shadow 0.25s ease;
 }
 
 .d03-controls button:hover {
   transform: scale(1.12);
-  box-shadow: 0 10px 22px rgba(16, 16, 20, 0.16);
+  background: #18181b;
+  color: #ffffff;
+  border-color: #18181b;
+  box-shadow: 0 10px 28px rgba(16, 16, 20, 0.22);
 }
 
-.d03-controls .prev {
-  background: #9a9aa2;
+.d03-controls button:active {
+  transform: scale(0.95);
 }
 
-.d03-controls .prev:hover {
-  background: #1d1d1f;
-}
-
+.d03-controls .prev,
 .d03-controls .next {
-  background: #1d1d1f;
-}
-
-.d03-controls .next:hover {
-  background: #000;
-  transform: scale(1.12) translateX(2px);
+  /* Common style handled above */
 }
 
 .d03-hint {
-  position: absolute;
-  left: 50%;
-  bottom: 0.2rem;
-  transform: translateX(-50%);
-  z-index: 8;
-  font-size: 9px;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: rgba(22, 22, 22, 0.35);
+  display: none;
 }
 
 .d03-rail {
   position: absolute;
   left: 50%;
-  bottom: 4.15rem;
+  bottom: 2rem;
   z-index: 9;
   width: min(840px, calc(100% - 1.5rem));
   transform: translateX(-50%);
@@ -997,34 +992,47 @@
 
 .d03-vehicle-bus {
   position: relative;
-  width: 42px;
-  height: 24px;
-  border-radius: 8px;
-  background: #18181b;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 2px solid #0284c7;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 3px;
 }
 
 .d03-vehicle-headlights {
   position: absolute;
-  right: -8px;
+  right: -12px;
   top: 50%;
   transform: translateY(-50%);
   width: 0;
   height: 0;
-  border-top: 14px solid transparent;
-  border-bottom: 14px solid transparent;
-  border-left: 28px solid rgba(254, 240, 138, 0.45);
-  filter: blur(2px);
+  border-top: 18px solid transparent;
+  border-bottom: 18px solid transparent;
+  border-left: 36px solid rgba(254, 240, 138, 0.55);
+  filter: blur(3px);
+  pointer-events: none;
 }
 
 .d03-vehicle-body {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.d03-mascot-bus-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
 }
 
 .d03-vehicle-tag {
@@ -1117,8 +1125,8 @@
 }
 
 .d03-road-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.08);
 }
 
 /* Connecting line from pin to description card */
@@ -1508,7 +1516,7 @@
 
   .d03-detail.is-bottom {
     width: min(520px, 86vw);
-    bottom: calc(8.4rem + env(safe-area-inset-bottom, 0px));
+    bottom: calc(4.8rem + env(safe-area-inset-bottom, 0px));
   }
 
   .d03-detail.is-bottom p {
@@ -1526,7 +1534,7 @@
   }
 
   .d03-rail {
-    bottom: calc(4.15rem + env(safe-area-inset-bottom, 0px));
+    bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
     width: calc(100% - 1.25rem);
   }
 
@@ -1544,7 +1552,8 @@
   }
 
   .d03-controls {
-    bottom: calc(0.85rem + env(safe-area-inset-bottom, 0px));
+    top: calc(50% + 152px);
+    bottom: auto;
   }
 
   .d03-hint {
@@ -1583,7 +1592,7 @@
   }
 
   .d03-track {
-    top: 43%;
+    top: 41%;
   }
 
   .d03-face {
@@ -1595,7 +1604,7 @@
   }
 
   .d03-detail.is-bottom {
-    bottom: calc(7.35rem + env(safe-area-inset-bottom, 0px));
+    bottom: calc(4.2rem + env(safe-area-inset-bottom, 0px));
     width: min(92vw, 420px);
   }
 
@@ -1611,7 +1620,7 @@
   }
 
   .d03-rail {
-    bottom: calc(3.45rem + env(safe-area-inset-bottom, 0px));
+    bottom: calc(1.2rem + env(safe-area-inset-bottom, 0px));
     width: calc(100% - 0.75rem);
   }
 
@@ -1630,12 +1639,13 @@
   }
 
   .d03-controls {
-    bottom: calc(0.4rem + env(safe-area-inset-bottom, 0px));
+    top: calc(41% + 88px);
+    bottom: auto;
   }
 
   .d03-controls button {
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
   }
 
   .d03-contact {
@@ -1683,8 +1693,12 @@
     top: 48%;
   }
 
+  .d03-controls {
+    top: calc(48% + 126px);
+  }
+
   .d03-detail.is-bottom {
-    bottom: 7.8rem;
+    bottom: calc(4.4rem + env(safe-area-inset-bottom, 0px));
   }
 
   .d03-detail.is-bottom p {
@@ -1695,7 +1709,7 @@
   }
 
   .d03-rail {
-    bottom: 4rem;
+    bottom: calc(1.4rem + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -1707,7 +1721,7 @@
   }
 
   .d03-detail.is-bottom {
-    bottom: calc(6.6rem + env(safe-area-inset-bottom, 0px));
+    bottom: calc(3.6rem + env(safe-area-inset-bottom, 0px));
   }
 
   .d03-detail.is-bottom p {
@@ -1723,11 +1737,20 @@
   }
 
   .d03-rail {
-    bottom: calc(3.2rem + env(safe-area-inset-bottom, 0px));
+    bottom: calc(1.1rem + env(safe-area-inset-bottom, 0px));
   }
 
   .d03-track {
     top: 44%;
+  }
+
+  .d03-controls {
+    top: calc(44% + 78px);
+  }
+
+  .d03-controls button {
+    width: 34px;
+    height: 34px;
   }
 
   .d03-card {
