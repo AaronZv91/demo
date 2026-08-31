@@ -21,6 +21,7 @@ export function Design03Experience() {
   const cardsRef = useRef<HTMLElement[]>([]);
   const lenisRef = useRef<Lenis | null>(null);
   const stRef = useRef<ScrollTrigger | null>(null);
+  const layoutRef = useRef<(progress: number) => void>(() => {});
   const activeRef = useRef(0);
   const goToIndexRef = useRef<(index: number) => void>(() => {});
   const [active, setActive] = useState(0);
@@ -127,6 +128,7 @@ export function Design03Experience() {
         setActive(index);
       }
     };
+    layoutRef.current = layout;
 
     layout(0);
     if (reduced) return undefined;
@@ -213,10 +215,15 @@ export function Design03Experience() {
       targetP = targetP + 1;
     }
 
-    const y = st.start + Math.max(0, Math.min(1, targetP)) * (st.end - st.start);
+    const clampedP = Math.max(0, Math.min(1, targetP));
+    const y = st.start + clampedP * (st.end - st.start);
     const lenis = lenisRef.current;
     if (lenis) lenis.scrollTo(y, { duration: 0.85 });
     else window.scrollTo({ top: y, behavior: "smooth" });
+
+    // Instantly update active state and layout as immediate fallback
+    layoutRef.current(clampedP);
+    setActive(target);
   };
   goToIndexRef.current = goToIndex;
 
@@ -343,6 +350,7 @@ export function Design03Experience() {
     let startX = 0;
     let startScroll = 0;
     let moved = false;
+    let currentPointerId: number | null = null;
 
     const onStart = (clientX: number) => {
       dragging = true;
@@ -354,14 +362,29 @@ export function Design03Experience() {
     const onMove = (clientX: number, event: Event) => {
       if (!dragging) return;
       const dx = clientX - startX;
-      if (Math.abs(dx) > 4) moved = true;
-      track.scrollLeft = startScroll - dx;
-      event.preventDefault();
-      event.stopPropagation();
+      if (Math.abs(dx) > 5) {
+        if (!moved) {
+          moved = true;
+          if (currentPointerId !== null && track.setPointerCapture) {
+            try {
+              track.setPointerCapture(currentPointerId);
+            } catch {}
+          }
+        }
+        track.scrollLeft = startScroll - dx;
+        event.preventDefault();
+        event.stopPropagation();
+      }
     };
 
     const onEnd = () => {
+      if (currentPointerId !== null && track.hasPointerCapture?.(currentPointerId)) {
+        try {
+          track.releasePointerCapture(currentPointerId);
+        } catch {}
+      }
       dragging = false;
+      currentPointerId = null;
     };
 
     const onTouchStart = (e: TouchEvent) => {
@@ -381,14 +404,18 @@ export function Design03Experience() {
     const onPointerDown = (e: PointerEvent) => {
       if (e.pointerType === "touch") return;
       if (e.button !== 0) return;
+      currentPointerId = e.pointerId;
       onStart(e.clientX);
-      track.setPointerCapture?.(e.pointerId);
     };
     const onPointerMove = (e: PointerEvent) => {
       if (e.pointerType === "touch") return;
       onMove(e.clientX, e);
     };
     const onPointerUp = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
+      onEnd();
+    };
+    const onPointerCancel = (e: PointerEvent) => {
       if (e.pointerType === "touch") return;
       onEnd();
     };
@@ -407,7 +434,7 @@ export function Design03Experience() {
     track.addEventListener("pointerdown", onPointerDown);
     track.addEventListener("pointermove", onPointerMove, { passive: false });
     track.addEventListener("pointerup", onPointerUp);
-    track.addEventListener("pointercancel", onPointerUp);
+    track.addEventListener("pointercancel", onPointerCancel);
     track.addEventListener("click", onClickCapture, true);
 
     return () => {
@@ -418,7 +445,7 @@ export function Design03Experience() {
       track.removeEventListener("pointerdown", onPointerDown);
       track.removeEventListener("pointermove", onPointerMove);
       track.removeEventListener("pointerup", onPointerUp);
-      track.removeEventListener("pointercancel", onPointerUp);
+      track.removeEventListener("pointercancel", onPointerCancel);
       track.removeEventListener("click", onClickCapture, true);
     };
   }, []);
@@ -437,7 +464,6 @@ export function Design03Experience() {
   }, [active]);
 
   const current = companies[active] ?? companies[0];
-  const stats = current.stats.slice(0, 2);
 
   return (
     <>
@@ -506,24 +532,6 @@ export function Design03Experience() {
             ))}
           </div>
         </div>
-
-        <aside key={`${current.id}-left`} className="d03-detail is-left is-show">
-          <small>Est. {current.founded}</small>
-          <h3>{current.name}</h3>
-          <p>{current.location}</p>
-          <p>{current.hours}</p>
-        </aside>
-
-        <aside key={`${current.id}-right`} className="d03-detail is-right is-show">
-          <small>{current.short}</small>
-          <h3>{current.slogan}</h3>
-          {stats.map((s) => (
-            <p className="stat" key={s.label}>
-              <strong>{s.value}</strong>
-              {s.label}
-            </p>
-          ))}
-        </aside>
 
         <div key={`${current.id}-bottom`} className="d03-detail is-bottom is-show">
           <p>{current.mission}</p>
